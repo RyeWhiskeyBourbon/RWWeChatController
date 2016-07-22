@@ -14,7 +14,8 @@
 
 <
     RWWeChatBarDelegate,
-    UITextViewDelegate
+    UITextViewDelegate,
+    RWAccessoryDelegate
 >
 
 @property (nonatomic,strong)UIButton *makeVoiceMessage;
@@ -31,7 +32,7 @@
 
 @implementation RWWeChatBar
 
-+ (instancetype)wechatBarWithAutoLayout:(void(^)(MASConstraintMaker *))autoLayout
++ (instancetype)wechatBarWithAutoLayout:(void (^)(MASConstraintMaker *))autoLayout
 {
     RWWeChatBar *bar = [[RWWeChatBar alloc] init];
     
@@ -90,6 +91,17 @@
 
 - (void)setDefaultSettings
 {
+    self.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    self.layer.borderColor = [__BORDER_COLOR__ CGColor];
+    self.layer.borderWidth = 0.3;
+    
+    _messageType.image = [UIImage imageNamed:@"voice"];
+    _expressionKeyboard.image = [UIImage imageNamed:@"myface"];
+    _otherFunction.image = [UIImage imageNamed:@"otherFuntion"];
+    
+    _purposeMenu.delegate = self;
+    _inputView.delegate = self;
+    
     _isTextMessage = YES;
     _makeVoiceMessage.hidden = YES;
     
@@ -129,6 +141,8 @@
     [self addGestureRecognizers];
 }
 
+#pragma mark - textView Delegate
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if([text isEqualToString:@"\n"])
@@ -164,6 +178,8 @@
     return YES;
 }
 
+#pragma mark - action
+
 - (void)touchDownAtButton:(UIButton *)button
 {
     _makeVoiceMessage.backgroundColor = __BORDER_COLOR__;
@@ -185,6 +201,7 @@
     
     [_makeVoiceMessage setTitle:@"按住  说话"
                        forState:UIControlStateNormal];
+    
     [_makeVoiceMessage setTitleColor:__BORDER_COLOR__
                             forState:UIControlStateNormal];
     
@@ -193,6 +210,64 @@
         [_delegate tapeEndAtChatBar:self];
     }
 }
+
+#pragma mark - accessory delegate
+
+- (void)accessoryInputView:(RWAccessoryInputView *)inputView selectedItem:(NSString *)item
+{
+    NSString *text = _makeTextMessage.textView.text;
+    
+    _makeTextMessage.textView.text = [NSString stringWithFormat:@"%@%@",text,item];
+}
+
+- (void)deleteAItemAtAccessoryInputView:(RWAccessoryInputView *)inputView
+{
+    NSString *text = _makeTextMessage.textView.text;
+    
+    if (text.length == 0)
+    {
+        return;
+    }
+    else if (text.length == 1)
+    {
+        _makeTextMessage.textView.text = nil;
+        return;
+    }
+    
+    if (isContainsEmoji([text substringFromIndex:text.length - 2]))
+    {
+        if (text.length == 2)
+        {
+            _makeTextMessage.textView.text = nil;
+            return;
+        }
+        
+        _makeTextMessage.textView.text = [text substringToIndex:text.length - 2];
+    }
+    else
+    {
+        _makeTextMessage.textView.text = [text substringToIndex:text.length - 1];
+    }
+}
+
+- (void)sendMessageAtAccessoryInputView:(RWAccessoryInputView *)inputView
+{
+    if (_delegate)
+    {
+        [_delegate sendTextMessage:_makeTextMessage.textView.text];
+        _makeTextMessage.textView.text = nil;
+    }
+}
+
+- (void)accessoryPurposeMenu:(RWAccessoryPurposeMenu *)purposeMenu selectedFunction:(RWPurposeMenu)function
+{
+    if (_delegate)
+    {
+        [_delegate chatBar:self selectedFunction:function];
+    }
+}
+
+#pragma mark - Gesture
 
 - (void)addGestureRecognizers
 {
@@ -223,12 +298,14 @@
                 _makeTextMessage.hidden = YES;
                 _makeVoiceMessage.hidden = NO;
                 _isTextMessage = NO;
+                _messageType.image = [UIImage imageNamed:@"keyboard"];
             }
             else
             {
                 _makeTextMessage.hidden = NO;
                 _makeVoiceMessage.hidden = YES;
                 _isTextMessage = YES;
+                _messageType.image = [UIImage imageNamed:@"voice"];
             }
             
             break;
@@ -241,6 +318,7 @@
                 _makeTextMessage.hidden = NO;
                 _makeVoiceMessage.hidden = YES;
                 _isTextMessage = YES;
+                _messageType.image = [UIImage imageNamed:@"voice"];
             }
             
             [_makeTextMessage.textView resignFirstResponder];
@@ -254,6 +332,13 @@
         case RWChatBarButtonOfOtherFunction:
             
             _faceResponceAccessory = RWChatBarButtonOfOtherFunction;
+            
+            if (!_isTextMessage)
+            {
+                _makeTextMessage.hidden = NO;
+                _makeVoiceMessage.hidden = YES;
+                _isTextMessage = YES;
+            }
             
             [_makeTextMessage.textView resignFirstResponder];
             
@@ -470,11 +555,72 @@ NSArray *defaultEmoticons()
     return array;
 }
 
+BOOL isContainsEmoji(NSString *string)
+{
+    __block BOOL isEomji = NO;
+    
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
+                               options:NSStringEnumerationByComposedCharacterSequences
+                            usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop)
+     {
+         const unichar hs = [substring characterAtIndex:0];
+         
+         if (0xd800 <= hs && hs <= 0xdbff)
+         {
+             if (substring.length > 1)
+             {
+                 const unichar ls = [substring characterAtIndex:1];
+                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                 if (0x1d000 <= uc && uc <= 0x1f77f)
+                 {
+                     isEomji = YES;
+                 }
+             }
+         }
+         else
+         {
+             
+             if (0x2100 <= hs && hs <= 0x27ff && hs != 0x263b)
+             {
+                 isEomji = YES;
+             }
+             else if (0x2B05 <= hs && hs <= 0x2b07)
+             {
+                 isEomji = YES;
+             }
+             else if (0x2934 <= hs && hs <= 0x2935)
+             {
+                 isEomji = YES;
+             }
+             else if (0x3297 <= hs && hs <= 0x3299)
+             {
+                 isEomji = YES;
+             }
+             else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50|| hs == 0x231a )
+             {
+                 isEomji = YES;
+             }
+             
+             if (!isEomji && substring.length > 1)
+             {
+                 const unichar ls = [substring characterAtIndex:1];
+                 
+                 if (ls == 0x20e3)
+                 {
+                     isEomji = YES;
+                 }
+             }
+         }
+     }];
+    
+    return isEomji;
+}
+
 @implementation RWAccessoryBaseView
 
 - (void)initViews
 {
-    self.backgroundColor = __BORDER_COLOR__;
+    self.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -508,6 +654,11 @@ NSArray *defaultEmoticons()
     return nil;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(collectionView.bounds.size.width, collectionView.bounds.size.height);
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -534,21 +685,65 @@ NSArray *defaultEmoticons()
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self.inputView registerClass:[RWInputViewCell class]
-       forCellWithReuseIdentifier:NSStringFromClass([RWInputViewCell class])];
+        [self.inputView registerClass:[RWInputViewPageCell class]
+       forCellWithReuseIdentifier:NSStringFromClass([RWInputViewPageCell class])];
+        
+        _send = [[UIButton alloc] init];
+        [self addSubview:_send];
+        
+        [_send setTitle:@"发送" forState:UIControlStateNormal];
+        _send.backgroundColor = [UIColor blueColor];
+        _send.titleLabel.font = [UIFont systemFontOfSize:13];
+        
+        [_send addTarget:self
+                  action:@selector(sendMessage)
+        forControlEvents:UIControlEventTouchUpInside];
+        
+        _send.layer.cornerRadius = 5;
     }
     return self;
+}
+
+- (void)sendMessage
+{
+    [self.delegate sendMessageAtAccessoryInputView:self];
 }
 
 - (void)didMoveToSuperview
 {
     [super didMoveToSuperview];
     
-    self.resource = defaultEmoticons();
+    NSMutableArray *emots = [defaultEmoticons() mutableCopy];
     
-    self.pageView.numberOfPages = _resource.count % 32?
-                                  _resource.count / 32 + 1:
-                                  _resource.count / 32;
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < emots.count; i++)
+    {
+        if (i == emots.count - 1)
+        {
+            [temp addObject:@"i"];
+            [items addObject:[temp copy]];
+            [temp removeAllObjects];
+            
+            break;
+        }
+        
+        if (i % 32 == 31)
+        {
+            [temp addObject:@"i"];
+            [items addObject:[temp copy]];
+            [temp removeAllObjects];
+            
+            continue;
+        }
+        
+        [temp addObject:emots[i]];
+    }
+    
+    _resource = items;
+    
+    self.pageView.numberOfPages = items.count;
     
     self.pageView.currentPage = 0;
     self.pageView.currentPageIndicatorTintColor = [UIColor blackColor];
@@ -564,8 +759,16 @@ NSArray *defaultEmoticons()
         
         make.left.equalTo(self.mas_left).offset(0);
         make.right.equalTo(self.mas_right).offset(0);
-        make.bottom.equalTo(self.mas_bottom).offset(0);
+        make.bottom.equalTo(self.mas_bottom).offset(-40);
         make.height.equalTo(@(20));
+    }];
+    
+    [_send mas_makeConstraints:^(MASConstraintMaker *make) {
+       
+        make.width.equalTo(@(40));
+        make.right.equalTo(self.mas_right).offset(-10);
+        make.top.equalTo(self.pageView.mas_bottom).offset(5);
+        make.bottom.equalTo(self.mas_bottom).offset(-5);
     }];
     
     [self.inputView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -575,6 +778,8 @@ NSArray *defaultEmoticons()
         make.top.equalTo(self.mas_top).offset(10);
         make.bottom.equalTo(self.pageView.mas_top).offset(-10);
     }];
+    
+    
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -584,26 +789,28 @@ NSArray *defaultEmoticons()
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row % 32 == 4)
-    {
-        self.pageView.currentPage = indexPath.row / 32;
-    }
+    self.pageView.currentPage = indexPath.row;
     
-    RWInputViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWInputViewCell class]) forIndexPath:indexPath];
+    RWInputViewPageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWInputViewPageCell class]) forIndexPath:indexPath];
     
-    cell.item.text = _resource[indexPath.row];
+    [cell compositonItems:_resource[indexPath.row]
+             squareTarget:RWSquareTargetMake(8, 4)
+             selectedItem:^(NSString *item) {
+                 
+                 if ([item isEqualToString:@"i"])
+                 {
+                     [self.delegate deleteAItemAtAccessoryInputView:self];
+                 }
+                 else
+                 {
+                     [self.delegate accessoryInputView:self
+                                          selectedItem:item];
+                 }
+             }];
+    
+    cell.backgroundColor = collectionView.backgroundColor;
     
     return cell;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(collectionView.bounds.size.width/8, collectionView.bounds.size.height/4);
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    
 }
 
 @end
@@ -620,9 +827,10 @@ NSArray *defaultEmoticons()
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self.inputView registerClass:[RWPurposeMenuCell class]
-           forCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuCell class])];
+        [self.inputView registerClass:[RWPurposeMenuPageCell class]
+           forCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuPageCell class])];
     }
+    
     return self;
 }
 
@@ -630,22 +838,15 @@ NSArray *defaultEmoticons()
 {
     [super didMoveToSuperview];
     
-    self.resource = @[@{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]},
-                      @{@"title":@"设置",@"image":[UIImage imageNamed:@"MY"]}];
+    _resource = @[@[@{@"title":@"照片",@"image":[UIImage imageNamed:@"mypic"]},
+                    @{@"title":@"拍照",@"image":[UIImage imageNamed:@"makephoto"]},
+                    @{@"title":@"小视频",@"image":[UIImage imageNamed:@"makeVideo"]},
+                    @{@"title":@"视频通话",@"image":[UIImage imageNamed:@"video"]},
+                    @{@"title":@"位置",@"image":[UIImage imageNamed:@"location"]},
+                    @{@"title":@"收藏",@"image":[UIImage imageNamed:@"collect"]},
+                    @{@"title":@"个人名片",@"image":[UIImage imageNamed:@"myNameCard"]}]];
     
-    self.pageView.numberOfPages = _resource.count % 8?
-                                  _resource.count / 8 + 1:
-                                  _resource.count / 8;
+    self.pageView.numberOfPages = _resource.count;
     
     self.pageView.currentPage = 0;
     self.pageView.currentPageIndicatorTintColor = [UIColor blackColor];
@@ -681,27 +882,128 @@ NSArray *defaultEmoticons()
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    RWPurposeMenuCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuCell class]) forIndexPath:indexPath];
+    RWPurposeMenuPageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuPageCell class]) forIndexPath:indexPath];
     
-    cell.imageView.image = _resource[indexPath.row][@"image"];
-    cell.title.text = _resource[indexPath.row][@"title"];
+    [cell compositonItems:_resource[indexPath.row]
+             squareTarget:RWSquareTargetMake(4, 2)
+                indexPath:indexPath
+             selectedMenu:^(RWPurposeMenu menu)
+    {
+        [self.delegate accessoryPurposeMenu:self selectedFunction:menu];
+    }];
+    
+    return cell;
+}
+
+@end
+
+@interface RWInputViewPageCell ()
+
+<
+    UICollectionViewDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegateFlowLayout
+>
+
+@property (nonatomic,strong)UICollectionView *itemsContainer;
+
+@property (nonatomic,copy)void(^selectedItem)(NSString *item);
+
+@end
+
+RWSquareTarget RWSquareTargetMake(NSUInteger horizontal,NSUInteger vertical)
+{
+    RWSquareTarget square;
+    square.horizontal = horizontal;
+    square.vertical = vertical;
+    
+    return square;
+}
+
+@implementation RWInputViewPageCell
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self)
+    {
+        UICollectionViewFlowLayout *flowLayout =
+                                            [[UICollectionViewFlowLayout alloc] init];
+        flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        flowLayout.minimumLineSpacing = 0;
+        flowLayout.minimumInteritemSpacing = 0;
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        
+        _itemsContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:flowLayout];
+        
+        [self addSubview:_itemsContainer];
+        
+        [_itemsContainer mas_makeConstraints:^(MASConstraintMaker *make) {
+           
+            make.left.equalTo(self.mas_left).offset(0);
+            make.right.equalTo(self.mas_right).offset(0);
+            make.top.equalTo(self.mas_top).offset(0);
+            make.bottom.equalTo(self.mas_bottom).offset(0);
+        }];
+        
+        _itemsContainer.backgroundColor = [UIColor clearColor];
+        
+        _itemsContainer.showsVerticalScrollIndicator = NO;
+        _itemsContainer.showsHorizontalScrollIndicator = NO;
+        
+        _itemsContainer.delegate = self;
+        _itemsContainer.dataSource = self;
+        
+        [_itemsContainer registerClass:[RWInputViewItemCell class] forCellWithReuseIdentifier:NSStringFromClass([RWInputViewItemCell class])];
+    }
+    
+    return self;
+}
+
+- (void)compositonItems:(NSArray *)items squareTarget:(RWSquareTarget)square selectedItem:(void(^)(NSString *item))selectedItem
+{
+    if (items.count > square.vertical * square.horizontal)
+    {
+        _items = nil; [_itemsContainer reloadData];
+        return;
+    }
+    
+    _square = square; _items = items; _selectedItem = selectedItem;
+    
+    [_itemsContainer reloadData];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _items.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    RWInputViewItemCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWInputViewItemCell class]) forIndexPath:indexPath];
+    
+    cell.item.text = _items[indexPath.row];
     
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(collectionView.bounds.size.width/4, collectionView.bounds.size.height/2);
+    return CGSizeMake(collectionView.bounds.size.width/_square.horizontal, collectionView.bounds.size.height/_square.vertical);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if (_selectedItem)
+    {
+        _selectedItem(_items[indexPath.row]);
+    }
 }
 
 @end
 
-@implementation RWInputViewCell
+@implementation RWInputViewItemCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -727,7 +1029,107 @@ NSArray *defaultEmoticons()
 
 @end
 
-@implementation RWPurposeMenuCell
+@interface RWPurposeMenuPageCell ()
+
+<
+    UICollectionViewDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegateFlowLayout
+>
+
+@property (nonatomic,strong)UICollectionView *itemsContainer;
+
+@property (nonatomic,copy)void(^selectedMenu)(RWPurposeMenu menu);
+
+@end
+
+@implementation RWPurposeMenuPageCell
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self)
+    {
+        UICollectionViewFlowLayout *flowLayout =
+                                            [[UICollectionViewFlowLayout alloc] init];
+        flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        flowLayout.minimumLineSpacing = 0;
+        flowLayout.minimumInteritemSpacing = 0;
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        
+        _itemsContainer = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:flowLayout];
+        
+        [self addSubview:_itemsContainer];
+        
+        [_itemsContainer mas_makeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.equalTo(self.mas_left).offset(0);
+            make.right.equalTo(self.mas_right).offset(0);
+            make.top.equalTo(self.mas_top).offset(0);
+            make.bottom.equalTo(self.mas_bottom).offset(0);
+        }];
+        
+        _itemsContainer.backgroundColor = [UIColor clearColor];
+        
+        _itemsContainer.showsVerticalScrollIndicator = NO;
+        _itemsContainer.showsHorizontalScrollIndicator = NO;
+        
+        _itemsContainer.delegate = self;
+        _itemsContainer.dataSource = self;
+        
+        [_itemsContainer registerClass:[RWPurposeMenuItemCell class] forCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuItemCell class])];
+    }
+    
+    return self;
+}
+
+- (void)compositonItems:(NSArray *)items squareTarget:(RWSquareTarget)square indexPath:(NSIndexPath *)indexPath selectedMenu:(void (^)(RWPurposeMenu menu))selectedMenu
+{
+    if (items.count > square.vertical * square.horizontal)
+    {
+        _items = nil; [_itemsContainer reloadData];
+        return;
+    }
+    
+    _square = square; _items = items;
+    _selectedMenu = selectedMenu; _superIndexPath = indexPath;
+    
+    [_itemsContainer reloadData];
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _items.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    RWPurposeMenuItemCell *cell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWPurposeMenuItemCell class]) forIndexPath:indexPath];
+    
+    cell.title.text = [_items[indexPath.row] objectForKey:@"title"];
+    cell.imageView.image = [_items[indexPath.row] objectForKey:@"image"];
+    
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(collectionView.bounds.size.width/_square.horizontal, collectionView.bounds.size.height/_square.vertical);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_selectedMenu)
+    {
+        _selectedMenu(indexPath.row + _superIndexPath.row * _square.horizontal * _square.vertical);
+    }
+}
+
+@end
+
+@implementation RWPurposeMenuItemCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

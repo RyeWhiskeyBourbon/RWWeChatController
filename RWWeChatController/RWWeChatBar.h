@@ -66,6 +66,7 @@
 
 @class RWWeChatBar,RWTextField;
 @class RWAccessoryInputView,RWAccessoryPurposeMenu;
+typedef NS_ENUM(NSInteger,RWPurposeMenu);
 
 typedef NS_ENUM(NSInteger,RWChatBarButton)
 {
@@ -90,6 +91,8 @@ typedef NS_ENUM(NSInteger,RWChatBarButton)
 
 - (void)keyBoardWillShowWithSize:(CGSize)size;
 - (void)keyBoardWillHidden;
+
+- (void)chatBar:(RWWeChatBar *)chatBar selectedFunction:(RWPurposeMenu)function;
 
 @end
 
@@ -135,7 +138,9 @@ typedef NS_ENUM(NSInteger,RWPurposeMenu)
 @protocol RWAccessoryDelegate <NSObject>
 @optional
 
-- (void)accessoryInputView:(RWAccessoryInputView *)inputView selectedItem:(NSString *)item indexPath:(NSIndexPath *)indexPath;
+- (void)accessoryInputView:(RWAccessoryInputView *)inputView selectedItem:(NSString *)item;
+- (void)deleteAItemAtAccessoryInputView:(RWAccessoryInputView *)inputView;
+- (void)sendMessageAtAccessoryInputView:(RWAccessoryInputView *)inputView;
 
 - (void)accessoryPurposeMenu:(RWAccessoryPurposeMenu *)purposeMenu selectedFunction:(RWPurposeMenu)function;
 
@@ -157,9 +162,14 @@ typedef NS_ENUM(NSInteger,RWPurposeMenu)
 
 @end
 
+BOOL isContainsEmoji(NSString *string);
+NSArray *defaultEmoticons();
+
 @interface RWAccessoryInputView : RWAccessoryBaseView
 
 + (instancetype)accessoryInputViewWithFrame:(CGRect)frame;
+
+@property (nonatomic,strong)UIButton *send;
 
 @property (nonatomic,strong)NSArray *resource;
 
@@ -173,12 +183,41 @@ typedef NS_ENUM(NSInteger,RWPurposeMenu)
 
 @end
 
-@interface RWInputViewCell : UICollectionViewCell
+struct RWSquareTarget
+{
+    NSUInteger horizontal;
+    NSUInteger vertical;
+};
 
-@property (nonatomic,strong)UILabel *item;
+typedef struct RWSquareTarget RWSquareTarget;
+RWSquareTarget RWSquareTargetMake(NSUInteger horizontal,NSUInteger vertical);
+
+@interface RWInputViewPageCell : UICollectionViewCell
+
+@property (nonatomic,strong,readonly)NSArray *items;
+@property (nonatomic,assign,readonly)RWSquareTarget square;
+
+- (void)compositonItems:(NSArray *)items squareTarget:(RWSquareTarget)square selectedItem:(void(^)(NSString *item))selectedItem;
+
 @end
 
-@interface RWPurposeMenuCell : UICollectionViewCell
+@interface RWInputViewItemCell : UICollectionViewCell
+
+@property (nonatomic,strong)UILabel *item;
+
+@end
+
+@interface RWPurposeMenuPageCell : UICollectionViewCell
+
+@property (nonatomic,strong,readonly)NSArray *items;
+@property (nonatomic,assign,readonly)RWSquareTarget square;
+@property (nonatomic,strong,readonly)NSIndexPath *superIndexPath;
+
+- (void)compositonItems:(NSArray *)items squareTarget:(RWSquareTarget)square indexPath:(NSIndexPath *)indexPath selectedMenu:(void (^)(RWPurposeMenu menu))selectedMenu;
+
+@end
+
+@interface RWPurposeMenuItemCell : UICollectionViewCell
 
 @property (nonatomic,strong)UIImageView *imageView;
 @property (nonatomic,strong)UILabel *title;

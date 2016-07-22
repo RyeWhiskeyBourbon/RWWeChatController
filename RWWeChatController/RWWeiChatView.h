@@ -72,6 +72,7 @@
 #endif
 
 @class RWWeChatMessage ,RWWeChatView,RWWeChatCell;
+typedef NS_ENUM(NSInteger,RWTextMenuType);
 
 typedef NS_ENUM(NSInteger,RWMessageType)
 {
@@ -81,15 +82,30 @@ typedef NS_ENUM(NSInteger,RWMessageType)
     RWMessageTypeVideo
 };
 
+typedef NS_ENUM(NSInteger,RWMessageEvent)
+{
+    RWMessageEventPressText,
+    RWMessageEventPressImage,
+    RWMessageEventPressVoice,
+    RWMessageEventPressVideo,
+    RWMessageEventTapImage,
+    RWMessageEventTapVoice,
+    RWMessageEventTapVideo
+};
+
 NSString *getKey(RWMessageType type);
 NSString *getDate(NSDate *messageDate);
 
 CGSize getFitSize(NSString *text,UIFont *font,CGFloat width,CGFloat lines);
 CGSize getFitImageSize(UIImage *image);
+CGFloat getArrowheadX(RWWeChatCell *cell);
 
 @protocol RWWeChatViewEvent <NSObject>
+@optional
 
-- (void)wechatCell:(RWWeChatCell *)wechat eventWithType:(RWMessageType)type context:(id)context;
+- (void)wechatCell:(RWWeChatCell *)wechat event:(RWMessageEvent)event context:(id)context;
+
+- (void)touchSpaceAtwechatView:(RWWeChatView *)wechatView;
 
 @end
 
@@ -110,12 +126,12 @@ CGSize getFitImageSize(UIImage *image);
 
 @interface RWWeChatMessage : NSObject
 
-+ (instancetype)message:(id)message type:(RWMessageType)type myMessage:(BOOL)isMyMessage messageDate:(NSDate *)messageDate;
++ (instancetype)message:(id)message type:(RWMessageType)type myMessage:(BOOL)isMyMessage messageDate:(NSDate *)messageDate showTime:(BOOL)showTime;
 
 @property (nonatomic,assign)RWMessageType messageType;
 
 @property (nonatomic,assign)BOOL isMyMessage;
-@property (nonatomic,assign,readonly)BOOL showTime;
+@property (nonatomic,assign)BOOL showTime;
 @property (nonatomic,assign,readonly)CGFloat itemHeight;
 
 @property (nonatomic,strong)NSDate *messageDate;
@@ -142,6 +158,41 @@ CGSize getFitImageSize(UIImage *image);
 @property (nonatomic,assign)id<RWWeChatViewEvent> eventSource;
 
 @property (nonatomic,strong)RWWeChatMessage *message;
+
+@property (nonatomic,strong,readonly)RWMarginsLabel *contentLabel;
+@property (nonatomic,strong,readonly)UIButton *voiceButton;
+@property (nonatomic,strong,readonly)UIImageView *contentImage;
+
+
+@end
+
+@interface RWChatMenuView : UIView
+
++ (instancetype)menuWithAutoLayout:(void (^)(MASConstraintMaker *make))autoLayout order:(void (^)(RWTextMenuType type))order message:(RWWeChatMessage *)message arrowheadX:(CGFloat)arrowheadX;
+
+@property (nonatomic,strong)RWWeChatMessage *message;
+
+@end
+
+typedef NS_ENUM(NSInteger,RWTextMenuType)
+{
+    RWTextMenuTypeOfCopy,
+    RWTextMenuTypeOfRelay,
+    RWTextMenuTypeOfCollect,
+    RWTextMenuTypeOfDelete
+};
+
+@interface RWTextMenu : UICollectionView
+
++ (instancetype)textMenuWithAutoLayout:(void(^)(MASConstraintMaker *))autoLayout responseOrder:(void(^)(RWTextMenuType type))order isText:(BOOL)isText;
+
+@property (nonatomic,assign)BOOL isText;
+
+@end
+
+@interface RWTextMenuCell : UICollectionViewCell
+
+@property (nonatomic,strong)UILabel *textLabel;
 
 @end
 

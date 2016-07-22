@@ -13,7 +13,8 @@
 @interface ViewController ()
 
 <
-    RWWeChatBarDelegate
+    RWWeChatBarDelegate,
+    RWWeChatViewEvent
 >
 
 @property (nonatomic,assign)CGPoint viewCenter;
@@ -49,14 +50,14 @@
     
     for (int i = 0; i < 15; i++)
     {
-        RWWeChatMessage *message = [RWWeChatMessage message:@"哈哈" type:RWMessageTypeText myMessage:i%2 messageDate:nil];
+        RWWeChatMessage *message = [RWWeChatMessage message:@"haha" type:RWMessageTypeText myMessage:i%2 messageDate:nil showTime:NO];
         
         [arr addObject:message];
     }
     
     for (int i = 0; i < 15; i++)
     {
-        RWWeChatMessage *message = [RWWeChatMessage message:[UIImage imageNamed:@"someOne.jpg"] type:RWMessageTypeImage myMessage:i%2 messageDate:nil];
+        RWWeChatMessage *message = [RWWeChatMessage message:[UIImage imageNamed:@"someOne.jpg"] type:RWMessageTypeImage myMessage:i%2 messageDate:nil showTime:NO];
         
         [arr addObject:message];
     }
@@ -70,7 +71,42 @@
         
     } messages:arr];
     
+    _weChat.eventSource = self;
+    
     [self.view addSubview:_weChat];
+}
+
+- (void)touchSpaceAtwechatView:(RWWeChatView *)wechatView
+{
+    [_bar.makeTextMessage.textView resignFirstResponder];
+    
+    if (_bar.faceResponceAccessory == RWChatBarButtonOfExpressionKeyboard)
+    {
+        self.view.center = _viewCenter;
+        
+        [UIView animateWithDuration:1.f animations:^{
+            
+            _bar.inputView.frame = __KEYBOARD_FRAME__;
+            
+            [_bar.inputView removeFromSuperview];
+        }];
+    }
+    else if (_bar.faceResponceAccessory == RWChatBarButtonOfOtherFunction)
+    {
+        self.view.center = _viewCenter;
+        
+        [UIView animateWithDuration:1.f animations:^{
+    
+            _bar.purposeMenu.frame = __KEYBOARD_FRAME__;
+            
+            [_bar.purposeMenu removeFromSuperview];
+        }];
+    }
+}
+
+- (void)wechatCell:(RWWeChatCell *)wechat eventWithType:(RWMessageType)type context:(id)context
+{
+    
 }
 
 - (void)keyBoardWillShowWithSize:(CGSize)size
@@ -100,16 +136,33 @@
     RWWeChatMessage *chatMessage = [RWWeChatMessage message:message
                                                        type:RWMessageTypeText
                                                   myMessage:YES
-                                                messageDate:nil];
+                                                messageDate:nil
+                                                   showTime:NO];
     
     [_weChat addMessage:chatMessage];
 }
 
 - (void)openAccessoryInputViewAtChatBar:(RWWeChatBar *)chatBar
 {
+    if (chatBar.purposeMenu.superview)
+    {
+        self.view.center = _viewCenter;
+        chatBar.purposeMenu.frame = __KEYBOARD_FRAME__;
+        
+        [chatBar.purposeMenu removeFromSuperview];
+    }
+    
     [self.view.window addSubview:chatBar.inputView];
     
-    if (self.view.center.y != _viewCenter.y) { return; }
+    if (self.view.center.y != _viewCenter.y)
+    {
+        self.view.center = _viewCenter;
+        chatBar.inputView.frame = __KEYBOARD_FRAME__;
+        
+        [chatBar.inputView removeFromSuperview];
+        
+        return;
+    }
     
     CGPoint pt = self.view.center , inputViewPt = chatBar.inputView.center;
     
@@ -125,9 +178,25 @@
 
 - (void)openMultiPurposeMenuAtChatBar:(RWWeChatBar *)chatBar
 {
+    if (chatBar.inputView.superview)
+    {
+        self.view.center = _viewCenter;
+        chatBar.inputView.frame = __KEYBOARD_FRAME__;
+        
+        [chatBar.inputView removeFromSuperview];
+    }
+    
     [self.view.window addSubview:chatBar.purposeMenu];
     
-    if (self.view.center.y != _viewCenter.y) { return; }
+    if (self.view.center.y != _viewCenter.y)
+    {
+        self.view.center = _viewCenter;
+        chatBar.purposeMenu.frame = __KEYBOARD_FRAME__;
+        
+        [chatBar.purposeMenu removeFromSuperview];
+        
+        return;
+    }
     
     CGPoint pt = self.view.center , purposeMenuPt = chatBar.purposeMenu.center;
     
@@ -145,7 +214,6 @@
 {
     if (chatBar.faceResponceAccessory == RWChatBarButtonOfExpressionKeyboard)
     {
-            
         self.view.center = _viewCenter;
         chatBar.inputView.frame = __KEYBOARD_FRAME__;
         
@@ -153,12 +221,16 @@
     }
     else if (chatBar.faceResponceAccessory == RWChatBarButtonOfOtherFunction)
     {
-            
         self.view.center = _viewCenter;
         chatBar.purposeMenu.frame = __KEYBOARD_FRAME__;
         
         [chatBar.purposeMenu removeFromSuperview];
     }
+}
+
+- (void)chatBar:(RWWeChatBar *)chatBar selectedFunction:(RWPurposeMenu)function
+{
+    NSLog(@"%d",(int)function);
 }
 
 - (void)tapeEndAtChatBar:(RWWeChatBar *)chatBar
