@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Masonry.h"
+#import "RWWeiChatView.h"
 
 #ifndef __RWGET_SYSFONT
 #define __RWGET_SYSFONT(size) [UIFont systemFontOfSize:(size)]
@@ -80,11 +81,8 @@ typedef NS_ENUM(NSInteger,RWChatBarButton)
 @protocol RWWeChatBarDelegate <NSObject>
 @optional
 
-- (void)tapeBeginAtChatBar:(RWWeChatBar *)chatBar;
-- (void)tapeEndAtChatBar:(RWWeChatBar *)chatBar;
-
 - (void)beginEditingTextAtChatBar:(RWWeChatBar *)chatBar;
-- (void)sendTextMessage:(NSString *)message;
+- (void)sendMessage:(id)message type:(RWMessageType)type;
 
 - (void)openAccessoryInputViewAtChatBar:(RWWeChatBar *)chatBar;
 - (void)openMultiPurposeMenuAtChatBar:(RWWeChatBar *)chatBar;
@@ -132,7 +130,13 @@ typedef NS_ENUM(NSInteger,RWChatBarButton)
 
 typedef NS_ENUM(NSInteger,RWPurposeMenu)
 {
-    RWPurposeMenuOf
+    RWPurposeMenuOfPhoto = 0,
+    RWPurposeMenuOfCamera,
+    RWPurposeMenuOfSmallVideo,
+    RWPurposeMenuOfVideoCall,
+    RWPurposeMenuOfLocation,
+    RWPurposeMenuOfCollect,
+    RWPurposeMenuOfMyCard
 };
 
 @protocol RWAccessoryDelegate <NSObject>

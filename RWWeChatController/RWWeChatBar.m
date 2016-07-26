@@ -7,6 +7,7 @@
 //
 
 #import "RWWeChatBar.h"
+#import "FEButton.h"
 
 #define EMOJI_CODE_TO_SYMBOL(x) ((((0x808080F0 | (x & 0x3F000) >> 4) | (x & 0xFC0) << 10) | (x & 0x1C0000) << 18) | (x & 0x3F) << 24);
 
@@ -15,10 +16,11 @@
 <
     RWWeChatBarDelegate,
     UITextViewDelegate,
-    RWAccessoryDelegate
+    RWAccessoryDelegate,
+    FEButtonViewDelegate
 >
 
-@property (nonatomic,strong)UIButton *makeVoiceMessage;
+@property (nonatomic,strong)FEButton *makeVoiceMessage;
 
 @property (nonatomic,strong)UIImageView *messageType;
 
@@ -73,7 +75,8 @@
     _makeTextMessage = [[RWTextField alloc] init];
     [self addSubview:_makeTextMessage];
     
-    _makeVoiceMessage = [[UIButton alloc] init];
+    _makeVoiceMessage = [[FEButton alloc] initWithSuperView:self
+                                         setBackgroundImage:nil];
     [self addSubview:_makeVoiceMessage];
     
     _messageType = [[UIImageView alloc] init];
@@ -87,6 +90,14 @@
     _otherFunction = [[UIImageView alloc] init];
     _otherFunction.tag = RWChatBarButtonOfOtherFunction;
     [self addSubview:_otherFunction];
+}
+
+#pragma mark - voice delegate
+
+- (void)sendVoice:(NSData *)voice time:(NSInteger)second
+{
+    [_delegate sendMessage:@{@"time":@(second),@"data":voice}
+                      type:RWMessageTypeVoice];
 }
 
 - (void)setDefaultSettings
@@ -119,6 +130,7 @@
     _makeVoiceMessage.clipsToBounds = YES;
     _makeVoiceMessage.layer.borderWidth = 0.3;
     _makeVoiceMessage.layer.borderColor = [__BORDER_COLOR__ CGColor];
+    _makeVoiceMessage.delegate = self;
     
     [_makeVoiceMessage setTitle:@"按住  说话"
                        forState:UIControlStateNormal];
@@ -129,14 +141,6 @@
                        forState:UIControlStateSelected];
     [_makeVoiceMessage setTitleColor:self.backgroundColor
                             forState:UIControlStateSelected];
-    
-    [_makeVoiceMessage addTarget:self
-                          action:@selector(touchDownAtButton:)
-                forControlEvents:UIControlEventTouchDown];
-    
-    [_makeVoiceMessage addTarget:self
-                          action:@selector(touchUpInsideAtButton:)
-                forControlEvents:UIControlEventTouchUpInside];
     
     [self addGestureRecognizers];
 }
@@ -156,7 +160,7 @@
         
         if (_delegate)
         {
-            [_delegate sendTextMessage:textView.text];
+            [_delegate sendMessage:textView.text type:RWMessageTypeText];
         }
         
         textView.text = nil;
@@ -176,39 +180,6 @@
     }
     
     return YES;
-}
-
-#pragma mark - action
-
-- (void)touchDownAtButton:(UIButton *)button
-{
-    _makeVoiceMessage.backgroundColor = __BORDER_COLOR__;
-    
-    [_makeVoiceMessage setTitle:@"松开  发送"
-                       forState:UIControlStateNormal];
-    [_makeVoiceMessage setTitleColor:self.backgroundColor
-                            forState:UIControlStateNormal];
-
-    if (_delegate)
-    {
-        [_delegate tapeBeginAtChatBar:self];
-    }
-}
-
-- (void)touchUpInsideAtButton:(UIButton *)button
-{
-    _makeVoiceMessage.backgroundColor = self.backgroundColor;
-    
-    [_makeVoiceMessage setTitle:@"按住  说话"
-                       forState:UIControlStateNormal];
-    
-    [_makeVoiceMessage setTitleColor:__BORDER_COLOR__
-                            forState:UIControlStateNormal];
-    
-    if (_delegate)
-    {
-        [_delegate tapeEndAtChatBar:self];
-    }
 }
 
 #pragma mark - accessory delegate
@@ -254,7 +225,7 @@
 {
     if (_delegate)
     {
-        [_delegate sendTextMessage:_makeTextMessage.textView.text];
+        [_delegate sendMessage:_makeTextMessage.textView.text type:RWMessageTypeText];
         _makeTextMessage.textView.text = nil;
     }
 }

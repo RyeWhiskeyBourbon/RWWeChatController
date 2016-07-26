@@ -8,12 +8,14 @@
 //
 
 #import "RWWeiChatView.h"
+#import "AppDelegate.h"
 
 @interface RWWeChatView ()
 
 <
     UITableViewDelegate,
     UITableViewDataSource,
+    UIGestureRecognizerDelegate,
     RWWeChatViewEvent
 >
 
@@ -30,15 +32,14 @@ static NSString *const chatCell = @"chatCell";
     RWWeChatView *chatView = [[RWWeChatView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
     
     chatView.autoLayout = autoLayout;
-    
     chatView.messages = messages;
     
     return chatView;
 }
 
-- (void)didMoveToSuperview
+- (void)didMoveToWindow
 {
-    [super didMoveToSuperview];
+    [super didMoveToWindow];
     
     [self mas_remakeConstraints:_autoLayout];
     
@@ -78,9 +79,9 @@ static NSString *const chatCell = @"chatCell";
     
     [self reloadData];
     [self scrollToRowAtIndexPath:
-     [NSIndexPath indexPathForRow:_messages.count-1 inSection:0]
-                atScrollPosition:UITableViewScrollPositionBottom
-                        animated:NO];
+                [NSIndexPath indexPathForRow:_messages.count-1 inSection:0]
+                            atScrollPosition:UITableViewScrollPositionBottom
+                                    animated:NO];
 }
 
 - (void)removeMessage:(RWWeChatMessage *)message
@@ -88,10 +89,33 @@ static NSString *const chatCell = @"chatCell";
     
 }
 
+#pragma scroll view delegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self removeTextMenu];
+}
+
+#pragma mark - gestureRecognizer
+
 - (void)touchSpace
 {
+    [self removeTextMenu];
+    
     [_eventSource touchSpaceAtwechatView:self];
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([touch.view isMemberOfClass:[UIView class]])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
+#pragma mark - init
 
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
 {
@@ -112,6 +136,8 @@ static NSString *const chatCell = @"chatCell";
         [self registerClass:[RWWeChatCell class] forCellReuseIdentifier:chatCell];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchSpace)];
+        
+        tap.delegate = self;
         
         [self addGestureRecognizer:tap];
     }
@@ -144,8 +170,14 @@ static NSString *const chatCell = @"chatCell";
 
 #pragma mark - text menu
 
-NSNumber *getTopRestrain(RWWeChatCell * cell)
+CGRect getTopRestrain(RWWeChatCell * cell)
 {
+    CGFloat width = cell.message.messageType == RWMessageTypeText?240:180;
+    CGFloat height = 40;
+    CGFloat x = !cell.message.isMyMessage?
+                __MARGINS__ * 2 + __HEADER_SIZE__:
+                __MAIN_SCREEN_WIDTH__ - (__MARGINS__ * 2 + __HEADER_SIZE__) - width;
+    
     CGFloat top = cell.frame.origin.y;
     
     if (cell.message.showTime)
@@ -155,34 +187,47 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
         top += (itemSize.height + __MARGINS__ + __TIME_MARGINS__ * 2);
     }
     
-    return @(top);
+    CGFloat y = top - height;
+    
+    return CGRectMake(x, y, width, height);
 }
 
 - (void)addTextMenuWithWechatCell:(RWWeChatCell *)wechat
 {
     [self removeTextMenu];
     
-//    RWTextMenu *menu = [RWTextMenu textMenuWithAutoLayout:^(MASConstraintMaker *make) {
-//        
-//        make.width.equalTo(@(280));
-//        make.height.equalTo(@(30));
-//        make.centerX.equalTo(self.mas_centerX).offset(0);
-//        make.bottom.equalTo(getTopRestrain(wechat));
-//        
-//    } responseOrder:^(RWTextMenuType type) {
-//        
-//    } isText:(wechat.message.messageType == RWMessageTypeText)];
-    
-    RWChatMenuView * menu = [RWChatMenuView menuWithAutoLayout:^(MASConstraintMaker *make) {
+    RWChatMenuView * menu = [RWChatMenuView menuWithFrame:getTopRestrain(wechat)
+                                                    order:^(RWTextMenuType type)
+    {
+        [self removeTextMenu];
         
-        make.width.equalTo(@(280));
-        make.height.equalTo(@(40));
-        make.centerX.equalTo(self.mas_centerX).offset(0);
-        make.bottom.equalTo(getTopRestrain(wechat));
+        switch (type)
+        {
+            case RWTextMenuTypeOfCopy:
+            {
+                UIPasteboard *paste = [UIPasteboard generalPasteboard];
+                paste.string =
+                            wechat.message.message[getKey(wechat.message.messageType)];
+                
+                break;
+
+            }
+            case RWTextMenuTypeOfRelay:
+                //转发
+                break;
+            case RWTextMenuTypeOfCollect:
+                //收藏
+                break;
+            case RWTextMenuTypeOfDelete:
+            {
+                [_messages removeObject:wechat.message];
+                [self reloadData];
+                break;
+            }
+            default:break;
+        }
         
-    } order:^(RWTextMenuType type) {
-        
-    } message:wechat.message arrowheadX:getArrowheadX(wechat)];
+    } message:wechat.message arrowheadDistance:getArrowheadX(wechat)];
     
     menu.tag = 19085;
     [self addSubview:menu];
@@ -200,6 +245,8 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 
 - (void)wechatCell:(RWWeChatCell *)wechat event:(RWMessageEvent)event context:(id)context
 {
+    [self removeTextMenu];
+    
     switch (event)
     {
         case RWMessageEventPressText:
@@ -274,7 +321,7 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
     _contentLabel = [[RWMarginsLabel alloc] init];
     [self addSubview:_contentLabel];
     
-    _voiceButton = [[UIButton alloc] init];
+    _voiceButton = [[RWVoicePlayButton alloc] init];
     [self addSubview:_voiceButton];
     
     _contentImage = [[UIImageView alloc] init];
@@ -286,6 +333,9 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 
 - (void)setDefaultSettings
 {
+    _contentLabel.userInteractionEnabled = YES;
+    _contentImage.userInteractionEnabled = YES;
+    
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSeparatorStyleNone;
     
@@ -298,6 +348,9 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
     
     _timeLabel.layer.cornerRadius = 3;
     _timeLabel.clipsToBounds = YES;
+    
+    _voiceButton.layer.cornerRadius = 5;
+    _voiceButton.clipsToBounds = YES;
     
     _contentLabel.margins = __TEXT_MARGINS__;
     _contentLabel.textLabel.font = __RWCHAT_FONT__;
@@ -357,7 +410,6 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
             [_eventSource wechatCell:self
                                event:RWMessageEventPressImage
                              context:_message.message[getKey(RWMessageTypeImage)]];
-            
             break;
             
         case RWMessageTypeVideo:
@@ -372,7 +424,6 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
             [_eventSource wechatCell:self
                                event:RWMessageEventPressVoice
                              context:_message.message[getKey(RWMessageTypeVoice)]];
-            
             break;
             
         default: break;
@@ -383,7 +434,19 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 {
     [_eventSource wechatCell:self
                        event:RWMessageEventTapVoice
-                     context:_message.message[getKey(RWMessageTypeVoice)]];
+                     context:_message.message[getKey(RWMessageTypeVoice)][@"data"]];
+    
+    [_voiceButton.playAnimation startAnimating];
+    
+    NSInteger second = [_message.message[getKey(RWMessageTypeVoice)][@"time"] integerValue];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(second * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if (_voiceButton.playAnimation.isAnimating)
+        {
+            [_voiceButton.playAnimation stopAnimating];
+        }
+    });
 }
 
 - (void)imageShow
@@ -397,16 +460,19 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 {
     [_eventSource wechatCell:self
                        event:RWMessageEventTapVideo
-                     context:_message.message[getKey(RWMessageTypeVideo)]];
+                     context:_message.message[getKey(RWMessageTypeVideo)][@"data"]];
 }
 
 #pragma mark - settings With Type
 
 - (void)setTextMessageSettings
 {
+    _arrowheadImage.hidden = NO;
     _voiceButton.hidden = YES;
     _contentImage.hidden = YES;
     _contentLabel.hidden = NO;
+    [_videoPlayer removeFromSuperview];
+    _videoPlayer = nil;
     
     _contentLabel.textLabel.textAlignment = NSTextAlignmentLeft;
     [self getAutoLayoutParameter];
@@ -426,19 +492,37 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 
 - (void)setVoiceMessageSettings
 {
+    _arrowheadImage.hidden = NO;
     _contentLabel.hidden = YES;
     _contentImage.hidden = YES;
     _voiceButton.hidden = NO;
+    [_videoPlayer removeFromSuperview];
+    _videoPlayer = nil;
+    
+    NSString *second = [_message.message[getKey(RWMessageTypeVoice)][@"time"] stringValue];
+    _voiceButton.second.text = [NSString stringWithFormat:@"%@“",second];
+    
+    if (_message.isMyMessage)
+    {
+        _voiceButton.backgroundColor = [UIColor greenColor];
+    }
+    else
+    {
+        _voiceButton.backgroundColor = [UIColor lightGrayColor];
+    }
     
     [self getAutoLayoutParameter];
-    [_voiceButton mas_remakeConstraints:_autoLayout];
+    [_voiceButton setAutoLayout:_autoLayout isMyMessage:_message.isMyMessage];
 }
 
 - (void)setImageMessageSettings
 {
+    _arrowheadImage.hidden = NO;
     _contentLabel.hidden = YES;
     _voiceButton.hidden = YES;
     _contentImage.hidden = NO;
+    [_videoPlayer removeFromSuperview];
+    _videoPlayer = nil;
     
     [self getAutoLayoutParameter];
     [_contentImage mas_remakeConstraints:_autoLayout];
@@ -448,7 +532,24 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
 
 - (void)setVideoMessageSettings
 {
+    _arrowheadImage.hidden = YES;
+    _contentLabel.hidden = YES;
+    _voiceButton.hidden = YES;
+    _contentImage.hidden = YES;
     
+    [self addSubview:[self getVideoPlayer]];
+    
+    _videoPlayer.videoURL = [NSURL fileURLWithPath:_message.message[getKey(RWMessageTypeVideo)]];
+}
+
+- (XZMicroVideoPlayerView *)getVideoPlayer
+{
+    if (!_videoPlayer)
+    {
+        _videoPlayer = [[XZMicroVideoPlayerView alloc] initWithFrame:getFitVideoSize(__VIDEO_ORIGINAL_SIZE__, _message.isMyMessage)];
+    }
+    
+    return _videoPlayer;
 }
 
 #pragma mark - autoLayout With Type
@@ -595,21 +696,42 @@ NSNumber *getTopRestrain(RWWeChatCell * cell)
             
             break;
         }
-        case RWMessageTypeVideo:
+        case RWMessageTypeVoice:
         {
+            NSInteger second = [_message.message[getKey(RWMessageTypeVoice)][@"time"] integerValue];
+            
+            CGFloat scale = second / 60.f;
+            
+            if (_message.isMyMessage)
+            {
+                left += __VOICE_LENTH(scale);
+                
+                if (left > __VOICE_MAX_OFFSET__)
+                {
+                    left = __VOICE_MAX_OFFSET__;
+                }
+            }
+            else
+            {
+                right += __VOICE_LENTH(scale);
+                
+                if (right > __VOICE_MAX_OFFSET__)
+                {
+                    right = __VOICE_MAX_OFFSET__;
+                }
+            }
+            
             break;
         }
-            
         default: break;
     }
-    
     
     _autoLayout = ^(MASConstraintMaker *make) {
         
         make.left.equalTo(weakSelf.mas_left).offset(left);
         make.right.equalTo(weakSelf.mas_right).offset(-right);
-        make.top.equalTo(masView).offset(10);
-        make.bottom.equalTo(weakSelf.mas_bottom).offset(-10);
+        make.top.equalTo(masView).offset(__MARGINS__);
+        make.bottom.equalTo(weakSelf.mas_bottom).offset(-__MARGINS__);
     };
 }
 
@@ -665,6 +787,28 @@ CGSize getFitImageSize(UIImage *image)
     }
     
     return imageSize;
+}
+
+CGRect getFitVideoSize(CGSize originalSize,BOOL isMyMessage)
+{
+    CGFloat width = originalSize.width;
+    CGFloat height = originalSize.height;
+    
+    if (width > __PICxVID_MAX_WIDTH__)
+    {
+        height = __PICxVID_MAX_WIDTH__ / width * height;
+        width = __PICxVID_MAX_WIDTH__;
+    }
+    
+    if (height > __PICxVID_MAX_HEIGHT__)
+    {
+        width = __PICxVID_MAX_HEIGHT__ / height * width;
+        height = __PICxVID_MAX_HEIGHT__;
+    }
+    
+    CGFloat x = isMyMessage?__MAIN_SCREEN_WIDTH__ - (__MAIN_SCREEN_WIDTH__ - __TEXT_LENGHT__) / 2 - width:(__MAIN_SCREEN_WIDTH__ - __TEXT_LENGHT__) / 2;
+    
+    return CGRectMake(x, __MARGINS__, width, height);
 }
 
 NSString *getDate(NSDate *messageDate)
@@ -769,6 +913,12 @@ NSString *getDate(NSDate *messageDate)
         
         _itemHeight = imageSize.height + __MARGINS__ * 2;
     }
+    else if (_messageType == RWMessageTypeVideo)
+    {
+        CGRect videoBounds = getFitVideoSize(__VIDEO_ORIGINAL_SIZE__, NO);
+        
+        _itemHeight = videoBounds.size.height + __MARGINS__ * 2;
+    }
     
     if (_showTime)
     {
@@ -836,52 +986,7 @@ NSString *getDate(NSDate *messageDate)
 
 @end
 
-@interface RWChatMenuView ()
-
-@property (nonatomic,strong)RWTextMenu *menu;
-@property (nonatomic,strong)UIImageView *arrowhead;
-@property (nonatomic,copy)void (^order)(RWTextMenuType type);
-@property (nonatomic,copy)void (^autoLayout)(MASConstraintMaker *make);
-@property (nonatomic,assign)CGFloat arrowheadX;
-
-@end
-
-CGFloat getArrowheadX(RWWeChatCell *cell)
-{
-    CGFloat centerX;
-    
-    switch (cell.message.messageType)
-    {
-        case RWMessageTypeText: centerX = cell.contentLabel.center.x; break;
-        case RWMessageTypeVoice: centerX = cell.voiceButton.center.x; break;
-        case RWMessageTypeImage: centerX = cell.contentImage.center.x; break;
-        case RWMessageTypeVideo:    break;
-        default:break;
-    }
-    
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat arrowheadX = centerX - (centerX - screenWidth / 2) / 2;
-    
-    if (arrowheadX < 0)
-    {
-        return 0;
-    }
-    
-    return arrowheadX;
-}
-
-@implementation RWChatMenuView
-
-+ (instancetype)menuWithAutoLayout:(void (^)(MASConstraintMaker *make))autoLayout order:(void (^)(RWTextMenuType type))order message:(RWWeChatMessage *)message arrowheadX:(CGFloat)arrowheadX
-{
-    RWChatMenuView *view = [[RWChatMenuView alloc] init];
-    view.arrowheadX = arrowheadX;
-    view.message = message;
-    view.order = order;
-    view.autoLayout = autoLayout;
-    
-    return view;
-}
+@implementation RWVoicePlayButton
 
 - (instancetype)init
 {
@@ -889,13 +994,28 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
     
     if (self)
     {
-        self.backgroundColor = [UIColor clearColor];
+        _playAnimation = [[UIImageView alloc] init];
+        _playAnimation.backgroundColor = [UIColor clearColor];
         
-        UIImage *arrowheadBottom = [[UIImage imageNamed:@"bottomCa"] imageWithColor:[UIColor blackColor]];
+        UIImage *voice3 = [[UIImage imageNamed:@"playVoice3"] imageWithColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
         
-        _arrowhead = [[UIImageView alloc] initWithImage:arrowheadBottom];
+        UIImage *voice2 = [[UIImage imageNamed:@"playVoice2"] imageWithColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
         
-        [self addSubview:_arrowhead];
+        UIImage *voice1 = [[UIImage imageNamed:@"playVoice1"] imageWithColor:[UIColor colorWithWhite:0.4 alpha:1.0]];
+        
+        _playAnimation.animationImages = @[voice3,voice2,voice1,voice2];
+        _playAnimation.animationDuration = 1.2;
+        _playAnimation.image = voice3;
+        
+        [self addSubview:_playAnimation];
+        
+        _second = [[UILabel alloc] init];
+        _second.backgroundColor = [UIColor clearColor];
+        [self addSubview:_second];
+        
+        _second.font = [UIFont boldSystemFontOfSize:12];
+        _second.textColor = [UIColor blackColor];
+        _second.textAlignment = NSTextAlignmentCenter;
     }
     
     return self;
@@ -905,38 +1025,140 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
 {
     [super didMoveToSuperview];
     
-    if (!_autoLayout)
+    if (_autoLayout)
     {
-        return;
+        [self setAutoLayout:_autoLayout isMyMessage:_isMyMessage];
+    }
+}
+
+- (void)setAutoLayout:(void (^)(MASConstraintMaker *make))autoLayout isMyMessage:(BOOL)isMyMessage
+{
+    _autoLayout = autoLayout; _isMyMessage = isMyMessage;
+    
+    if (self.superview)
+    {
+        [self mas_remakeConstraints:_autoLayout];
+        
+        if (_isMyMessage)
+        {
+            [_playAnimation mas_remakeConstraints:^(MASConstraintMaker *make) {
+                
+                make.width.equalTo(@(16));
+                make.height.equalTo(@(20));
+                make.centerY.equalTo(self.mas_centerY).offset(0);
+                make.right.equalTo(self.mas_right).offset(-8);
+            }];
+            
+            [_second mas_remakeConstraints:^(MASConstraintMaker *make) {
+                
+                make.width.equalTo(@(25));
+                make.height.equalTo(@(25));
+                make.centerY.equalTo(self.mas_centerY).offset(0);
+                make.left.equalTo(self.mas_left).offset(8);
+            }];
+        }
+        else
+        {
+            [_playAnimation mas_remakeConstraints:^(MASConstraintMaker *make) {
+                
+                make.width.equalTo(@(16));
+                make.height.equalTo(@(20));
+                make.centerY.equalTo(self.mas_centerY).offset(0);
+                make.left.equalTo(self.mas_left).offset(8);
+            }];
+            
+            [_second mas_remakeConstraints:^(MASConstraintMaker *make) {
+                
+                make.width.equalTo(@(25));
+                make.height.equalTo(@(25));
+                make.centerY.equalTo(self.mas_centerY).offset(0);
+                make.right.equalTo(self.mas_right).offset(-8);
+            }];
+        }
+    }
+}
+
+@end
+
+@interface RWChatMenuView ()
+
+@property (nonatomic,strong)RWTextMenu *menu;
+@property (nonatomic,strong)UIImageView *arrowhead;
+@property (nonatomic,copy)void (^order)(RWTextMenuType type);
+@property (nonatomic,assign)CGFloat arrowheadDistance;
+
+@end
+
+CGFloat getArrowheadX(RWWeChatCell *cell)
+{
+    CGFloat centerX = 0.f;
+    
+    switch (cell.message.messageType)
+    {
+        case RWMessageTypeText:  centerX = cell.contentLabel.center.x; break;
+        case RWMessageTypeVoice: centerX = cell.voiceButton.center.x; break;
+        case RWMessageTypeImage: centerX = cell.contentImage.center.x; break;
+        case RWMessageTypeVideo:    break;
+        default:break;
     }
     
-    [self mas_makeConstraints:_autoLayout];
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat arrowheadDisH = cell.message.isMyMessage?screenWidth - centerX - (__MARGINS__ * 2 + __HEADER_SIZE__):centerX - (__MARGINS__ * 2 + __HEADER_SIZE__);
     
-    [_arrowhead mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.width.equalTo(@(10));
-        make.height.equalTo(@(10));
-        make.bottom.equalTo(self.mas_bottom).offset(0);
-        make.centerX.equalTo(self.mas_centerX).offset(_arrowheadX);
-    }];
+    return arrowheadDisH;
+}
+
+@implementation RWChatMenuView
+
++ (instancetype)menuWithFrame:(CGRect)frame order:(void (^)(RWTextMenuType type))order message:(RWWeChatMessage *)message arrowheadDistance:(CGFloat)arrowheadDistance
+{
+    RWChatMenuView *view = [[RWChatMenuView alloc] initWithFrame:frame];
+    view.arrowheadDistance = arrowheadDistance;
+    view.message = message;
+    view.order = order;
     
-    if (!_menu)
+    CGPoint arrowheadPt = view.arrowhead.center;
+    
+    arrowheadPt.x = message.isMyMessage?
+                    view.frame.size.width -  arrowheadDistance:
+                    arrowheadDistance;
+
+    view.arrowhead.center = arrowheadPt;
+    
+    return view;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self)
     {
-        _menu = [RWTextMenu textMenuWithAutoLayout:^(MASConstraintMaker *make) {
-            
-            make.left.equalTo(self.mas_left).offset(0);
-            make.right.equalTo(self.mas_right).offset(0);
-            make.top.equalTo(self.mas_top).offset(0);
-            make.bottom.equalTo(_arrowhead.mas_top).offset(1);
-            
-        } responseOrder:^(RWTextMenuType type) {
-            
-            _order(type);
-            
-        } isText:(_message.messageType == RWMessageTypeText)];
+        self.backgroundColor = [UIColor clearColor];
         
-        [self addSubview:_menu];
+        UIImage *arrowheadBottom = [[UIImage imageNamed:@"bottomCa"] imageWithColor:[UIColor blackColor]];
+        
+        _arrowhead = [[UIImageView alloc] initWithFrame:CGRectMake(0 , frame.size.height - 10, 10, 10)];
+        
+        [self addSubview:_arrowhead];
+        
+        _arrowhead.image = arrowheadBottom;
     }
+    
+    return self;
+}
+
+- (void)setMessage:(RWWeChatMessage *)message
+{
+    _message = message;
+    
+    _menu = [RWTextMenu textMenuWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 8) responseOrder:^(RWTextMenuType type) {
+        
+        _order(type);
+        
+    } isText:(_message.messageType == RWMessageTypeText)];
+    
+    [self addSubview:_menu];
 }
 
 @end
@@ -951,24 +1173,22 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
 
 @property (nonatomic,strong)NSArray *resource;
 
-@property (nonatomic,copy)void (^autoLayout)(MASConstraintMaker *);
 @property (nonatomic,copy)void (^order)(RWTextMenuType type);
 
 @end
 
 @implementation RWTextMenu
 
-+ (instancetype)textMenuWithAutoLayout:(void (^)(MASConstraintMaker *))autoLayout responseOrder:(void (^)(RWTextMenuType type))order isText:(BOOL)isText
++ (instancetype)textMenuWithFrame:(CGRect)frame responseOrder:(void (^)(RWTextMenuType type))order isText:(BOOL)isText
 {
-    RWTextMenu *menu = [[RWTextMenu alloc] init];
-    menu.autoLayout = autoLayout;
+    RWTextMenu *menu = [[RWTextMenu alloc] initWithFrame:frame];
     menu.order = order;
     menu.isText = isText;
     
     return menu;
 }
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame
 {
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     
@@ -977,8 +1197,7 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     
-    self = [super initWithFrame:CGRectMake(0, 0, 0, 0)
-           collectionViewLayout:flowLayout];
+    self = [super initWithFrame:frame collectionViewLayout:flowLayout];
     
     if (self)
     {
@@ -1001,8 +1220,6 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
 - (void)didMoveToSuperview
 {
     [super didMoveToSuperview];
-    
-    [self mas_makeConstraints:_autoLayout];
     
     _resource = _isText?@[@"复制",@"转发",@"收藏",@"删除"]:@[@"转发",@"收藏",@"删除"];
     
@@ -1101,6 +1318,219 @@ CGFloat getArrowheadX(RWWeChatCell *cell)
     UIGraphicsEndImageContext();
     
     return newImage;
+}
+
+@end
+
+@interface RWPhotoAlbum ()
+
+<
+    UICollectionViewDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegateFlowLayout,
+    RWPhotoAlbumCellDelegate
+>
+
+@property (nonatomic,strong)NSArray *images;
+
+@end
+
+@implementation RWPhotoAlbum
+
++ (instancetype)photoAlbumWithImage:(UIImage *)image
+{
+    RWPhotoAlbum *photoAlbum = [[RWPhotoAlbum alloc] init];
+    photoAlbum.faceImage = image;
+    
+    return photoAlbum;
+}
+
+- (instancetype)init
+{
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumInteritemSpacing = 0;
+    flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    self = [super initWithFrame:[UIScreen mainScreen].bounds
+           collectionViewLayout:flowLayout];
+    
+    if (self)
+    {
+        AppDelegate *faceDelegate = [UIApplication sharedApplication].delegate;
+        UIWindow *faceWindow = faceDelegate.window;
+        
+        [faceWindow addSubview:self];
+        
+        self.backgroundColor = [UIColor colorWithWhite:0.1f alpha:0.8f];
+        self.showsVerticalScrollIndicator = NO;
+        self.showsHorizontalScrollIndicator = NO;
+        
+        self.delegate = self;
+        self.dataSource = self;
+        
+        [self registerClass:[RWPhotoAlbumCell class] forCellWithReuseIdentifier:NSStringFromClass([RWPhotoAlbumCell class])];
+    }
+    
+    return self;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _images.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    RWPhotoAlbumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([RWPhotoAlbumCell class]) forIndexPath:indexPath];
+    
+    cell.image = _images[indexPath.row];
+    cell.delegate = self;
+    
+    return cell;
+}
+
+- (void)closeFaceView
+{
+    [self removeFromSuperview];
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(collectionView.frame.size.width, collectionView.frame.size.height);
+}
+
+- (void)setFaceImage:(UIImage *)faceImage
+{
+    _faceImage = faceImage;
+    
+    if (!_images || !_images.count)
+    {
+        _images = [[NSArray alloc] initWithObjects:_faceImage, nil];
+        [self reloadData];
+    }
+    else
+    {
+        //影集 ？
+    }
+}
+
+@end
+
+@interface RWPhotoAlbumCell ()
+
+<
+    UIScrollViewDelegate,
+    UIGestureRecognizerDelegate
+>
+
+@property (nonatomic,strong)UIScrollView *photoView;
+@property (nonatomic,strong)UIImageView *imageView;
+
+@end
+
+@implementation RWPhotoAlbumCell
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self)
+    {
+        self.backgroundColor = [UIColor clearColor];
+        _photoView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        [self addSubview:_photoView];
+        
+        _photoView.backgroundColor = [UIColor clearColor];
+        _photoView.contentSize = _photoView.bounds.size;
+        _photoView.scrollsToTop = NO;
+        _photoView.minimumZoomScale = 0.5f;
+        _photoView.maximumZoomScale = 4.0f;
+        _photoView.delegate = self;
+        _photoView.showsVerticalScrollIndicator = NO;
+        _photoView.showsHorizontalScrollIndicator = NO;
+        
+        UITapGestureRecognizer *closeView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+        closeView.numberOfTapsRequired = 1;
+        
+        [_photoView addGestureRecognizer:closeView];
+        
+        _imageView = [[UIImageView alloc] init];
+        [_photoView addSubview:_imageView];
+        _imageView.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *changeSize = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeSize)];
+        changeSize.numberOfTapsRequired = 2;
+        [_imageView addGestureRecognizer:changeSize];
+        
+        UITapGestureRecognizer *wait = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(waitFor)];
+        wait.numberOfTapsRequired = 1;
+        [_imageView addGestureRecognizer:wait];
+    }
+    
+    return self;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return _imageView;
+}
+
+- (void)changeSize
+{
+    if (_photoView.zoomScale == 1.0f)
+    {
+        _photoView.zoomScale = 2.0f;
+    }
+    else
+    {
+        _photoView.zoomScale = 1.0f;
+    }
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    
+    _imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                 scrollView.contentSize.height * 0.5 + offsetY);
+}
+
+- (void)close
+{
+    if (_delegate)
+    {
+        [_delegate closeFaceView];
+    }
+}
+
+- (void)waitFor{}
+
+- (void)setImage:(UIImage *)image
+{
+    _image = image;
+    
+    CGSize imageSize = _image.size;
+    
+    CGFloat width = __MAIN_SCREEN_WIDTH__;
+    CGFloat height = width / imageSize.width * imageSize.height;
+    
+    if (height > __MAIN_SCREEN_HEIGHT__)
+    {
+        height = __MAIN_SCREEN_HEIGHT__;
+        width =  height / imageSize.height * imageSize.width;
+    }
+    
+    _imageView.frame = CGRectMake(0, 0, width, height);
+    _imageView.center = CGPointMake(_photoView.contentSize.width / 2, _photoView.contentSize.height / 2);
+    _photoView.contentSize = _imageView.bounds.size;
+    _imageView.image = _image;
 }
 
 @end

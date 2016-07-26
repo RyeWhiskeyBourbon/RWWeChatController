@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Masonry.h"
+#import "XZMicroVideoPlayerView.h"
 
 #ifndef __RWCHAT_FONT__
 #define __RWCHAT_FONT__ [UIFont systemFontOfSize:15]
@@ -19,6 +20,10 @@
 
 #ifndef __MAIN_SCREEN_WIDTH__
 #define __MAIN_SCREEN_WIDTH__ [UIScreen mainScreen].bounds.size.width
+#endif
+
+#ifndef __MAIN_SCREEN_HEIGHT__
+#define __MAIN_SCREEN_HEIGHT__ [UIScreen mainScreen].bounds.size.height
 #endif
 
 #ifndef __MARGINS__
@@ -50,7 +55,7 @@
 #ifdef __HEADER_SIZE__
 #ifdef __ARROWHEAD_SIZE__
 #ifndef __TEXT_LENGHT__
-#define __TEXT_LENGHT__ __MAIN_SCREEN_WIDTH__ - (__MARGINS__ + __HEADER_SIZE__ +__ARROWHEAD_SIZE__ + 5.f) * 2
+#define __TEXT_LENGHT__ (__MAIN_SCREEN_WIDTH__ - (__MARGINS__ + __HEADER_SIZE__ +__ARROWHEAD_SIZE__ + 5.f) * 2)
 #endif
 #endif
 #endif
@@ -65,6 +70,23 @@
 
 #ifndef __PICxVID_MAX_HEIGHT__
 #define __PICxVID_MAX_HEIGHT__ 180.0f
+#endif
+
+#ifdef __MAIN_SCREEN_WIDTH__
+#ifdef __MAIN_SCREEN_HEIGHT__
+#ifndef __VIDEO_ORIGINAL_SIZE__
+#define __VIDEO_ORIGINAL_SIZE__ CGSizeMake(__MAIN_SCREEN_WIDTH__, __MAIN_SCREEN_HEIGHT__ /3)
+#endif
+#endif
+#endif
+
+#ifdef __TEXT_LENGHT__
+#ifndef __VOICE_MAX_OFFSET__
+#define __VOICE_MAX_OFFSET__ __TEXT_LENGHT__ + __MARGINS__ + __HEADER_SIZE__ + __ARROWHEAD_SIZE__ + 5.f - 60.f
+#endif
+#ifndef __VOICE_LENTH
+#define __VOICE_LENTH(scale) __TEXT_LENGHT__ * (1.0f - scale)
+#endif
 #endif
 
 #ifndef __RWGET_COLOR
@@ -99,6 +121,7 @@ NSString *getDate(NSDate *messageDate);
 CGSize getFitSize(NSString *text,UIFont *font,CGFloat width,CGFloat lines);
 CGSize getFitImageSize(UIImage *image);
 CGFloat getArrowheadX(RWWeChatCell *cell);
+CGRect getFitVideoSize(CGSize originalSize,BOOL isMyMessage);
 
 @protocol RWWeChatViewEvent <NSObject>
 @optional
@@ -144,12 +167,23 @@ CGFloat getArrowheadX(RWWeChatCell *cell);
 @interface RWMarginsLabel : UIView
 
 @property (nonatomic,strong)UILabel *textLabel;
-
 @property (nonatomic,assign)CGFloat margins;
 
 @property (nonatomic,copy,readonly)void(^autoLayout)(MASConstraintMaker *make);
 
 - (void)setAutoLayout:(void(^)(MASConstraintMaker *make))autoLayout;
+
+@end
+
+@interface RWVoicePlayButton : UIButton
+
+@property (nonatomic,strong,readonly)UIImageView *playAnimation;
+@property (nonatomic,strong)UILabel *second;
+
+@property (nonatomic,copy,readonly)void(^autoLayout)(MASConstraintMaker *make);
+@property (nonatomic,assign)BOOL isMyMessage;
+
+- (void)setAutoLayout:(void(^)(MASConstraintMaker *make))autoLayout isMyMessage:(BOOL)isMyMessage;
 
 @end
 
@@ -160,15 +194,16 @@ CGFloat getArrowheadX(RWWeChatCell *cell);
 @property (nonatomic,strong)RWWeChatMessage *message;
 
 @property (nonatomic,strong,readonly)RWMarginsLabel *contentLabel;
-@property (nonatomic,strong,readonly)UIButton *voiceButton;
+@property (nonatomic,strong,readonly)RWVoicePlayButton *voiceButton;
 @property (nonatomic,strong,readonly)UIImageView *contentImage;
+@property (nonatomic,strong,readonly)XZMicroVideoPlayerView *videoPlayer;
 
 
 @end
 
 @interface RWChatMenuView : UIView
 
-+ (instancetype)menuWithAutoLayout:(void (^)(MASConstraintMaker *make))autoLayout order:(void (^)(RWTextMenuType type))order message:(RWWeChatMessage *)message arrowheadX:(CGFloat)arrowheadX;
++ (instancetype)menuWithFrame:(CGRect)frame order:(void (^)(RWTextMenuType type))order message:(RWWeChatMessage *)message arrowheadDistance:(CGFloat)arrowheadDistance;
 
 @property (nonatomic,strong)RWWeChatMessage *message;
 
@@ -184,7 +219,7 @@ typedef NS_ENUM(NSInteger,RWTextMenuType)
 
 @interface RWTextMenu : UICollectionView
 
-+ (instancetype)textMenuWithAutoLayout:(void(^)(MASConstraintMaker *))autoLayout responseOrder:(void(^)(RWTextMenuType type))order isText:(BOOL)isText;
++ (instancetype)textMenuWithFrame:(CGRect)frame responseOrder:(void (^)(RWTextMenuType type))order isText:(BOOL)isText;
 
 @property (nonatomic,assign)BOOL isText;
 
@@ -201,3 +236,25 @@ typedef NS_ENUM(NSInteger,RWTextMenuType)
 - (UIImage *)imageWithColor:(UIColor *)color;
 
 @end
+
+@interface RWPhotoAlbum : UICollectionView
+
++ (instancetype)photoAlbumWithImage:(UIImage *)image;
+
+@property (nonatomic,strong)UIImage *faceImage;
+
+@end
+
+@protocol RWPhotoAlbumCellDelegate <NSObject>
+
+- (void)closeFaceView;
+
+@end
+
+@interface RWPhotoAlbumCell : UICollectionViewCell
+
+@property (nonatomic,strong)UIImage *image;
+@property (nonatomic,assign)id<RWPhotoAlbumCellDelegate> delegate;
+
+@end
+

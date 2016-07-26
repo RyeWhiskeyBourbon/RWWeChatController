@@ -6,10 +6,9 @@
 //  Copyright © 2016年 RyeWhiskey. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "RWChatViewController.h"
 
-@interface ViewController : UIViewController
-
+@interface ViewController : RWChatViewController
 
 @end
 

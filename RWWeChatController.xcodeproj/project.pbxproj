@@ -29,6 +29,30 @@
 		129F970F1D377AC20096A8E6 /* someOne.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 129F970D1D377AC20096A8E6 /* someOne.jpg */; };
 		129F97121D377CAE0096A8E6 /* RightCa.png in Resources */ = {isa = PBXBuildFile; fileRef = 129F97101D377CAE0096A8E6 /* RightCa.png */; };
 		129F97131D377CAE0096A8E6 /* LifeCa.png in Resources */ = {isa = PBXBuildFile; fileRef = 129F97111D377CAE0096A8E6 /* LifeCa.png */; };
+		12D89C821D4215B50099F850 /* RWChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D89C811D4215B50099F850 /* RWChatViewController.m */; };
+		12D89C981D4216140099F850 /* FEProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D89C851D4216140099F850 /* FEProgressHUD.m */; };
+		12D89C991D4216140099F850 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12D89C871D4216140099F850 /* libmp3lame.a */; };
+		12D89C9A1D4216140099F850 /* Mp3Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D89C891D4216140099F850 /* Mp3Recorder.m */; };
+		12D89C9B1D4216140099F850 /* chat_message_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C8B1D4216140099F850 /* chat_message_back.png */; };
+		12D89C9C1D4216140099F850 /* FEButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D89C8D1D4216140099F850 /* FEButton.m */; };
+		12D89C9D1D4216140099F850 /* microphone1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C921D4216140099F850 /* microphone1@2x.png */; };
+		12D89C9E1D4216140099F850 /* microphone2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C931D4216140099F850 /* microphone2@2x.png */; };
+		12D89C9F1D4216140099F850 /* microphone3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C941D4216140099F850 /* microphone3@2x.png */; };
+		12D89CA01D4216140099F850 /* microphone4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C951D4216140099F850 /* microphone4@2x.png */; };
+		12D89CA11D4216140099F850 /* microphone5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C961D4216140099F850 /* microphone5@2x.png */; };
+		12F1EDA91D4456D900506D9E /* playVoice2.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA61D4456D900506D9E /* playVoice2.png */; };
+		12F1EDAA1D4456D900506D9E /* playVoice3.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA71D4456D900506D9E /* playVoice3.png */; };
+		12F1EDAB1D4456D900506D9E /* playVoice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA81D4456D900506D9E /* playVoice1.png */; };
+		12F1EDBB1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */; };
+		12F1EDBF1D44924200506D9E /* XZMicroVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */; };
+		12F1EDC01D44924200506D9E /* XZMicroVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDB81D44924200506D9E /* XZMicroVideoView.m */; };
+		12F1EDD61D4493EA00506D9E /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDCC1D4493EA00506D9E /* SVIndefiniteAnimatedView.m */; };
+		12F1EDD71D4493EA00506D9E /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDCE1D4493EA00506D9E /* SVProgressAnimatedView.m */; };
+		12F1EDD81D4493EA00506D9E /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDCF1D4493EA00506D9E /* SVProgressHUD.bundle */; };
+		12F1EDD91D4493EA00506D9E /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDD11D4493EA00506D9E /* SVProgressHUD.m */; };
+		12F1EDDA1D4493EA00506D9E /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDD31D4493EA00506D9E /* SVRadialGradientLayer.m */; };
+		12F1EDDC1D44A7A500506D9E /* MicroVideoSource.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDDB1D44A7A500506D9E /* MicroVideoSource.xcassets */; };
+		12F2F7B31D45F83000A3B13E /* RWMakeImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */; };
 		12FBA1751D407C5500F0D419 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA1691D407C5500F0D419 /* collect.png */; };
 		12FBA1761D407C5500F0D419 /* keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA16A1D407C5500F0D419 /* keyboard.png */; };
 		12FBA1771D407C5500F0D419 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA16B1D407C5500F0D419 /* location.png */; };
@@ -102,12 +126,49 @@
 		126EF30E1D362E850068F0CA /* View+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASAdditions.h"; sourceTree = "<group>"; };
 		126EF30F1D362E850068F0CA /* View+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+MASAdditions.m"; sourceTree = "<group>"; };
 		126EF3101D362E850068F0CA /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
-		1270B5771D361C6500DD4AC5 /* RWWeiChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWWeiChatView.h; sourceTree = "<group>"; };
-		1270B5781D361C6500DD4AC5 /* RWWeiChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWWeiChatView.m; sourceTree = "<group>"; };
+		1270B5771D361C6500DD4AC5 /* RWWeiChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RWWeiChatView.h; path = RWWeChatController/RWWeiChatView.h; sourceTree = "<group>"; };
+		1270B5781D361C6500DD4AC5 /* RWWeiChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RWWeiChatView.m; path = RWWeChatController/RWWeiChatView.m; sourceTree = "<group>"; };
 		129F970C1D377AC20096A8E6 /* MY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MY.png; sourceTree = "<group>"; };
 		129F970D1D377AC20096A8E6 /* someOne.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = someOne.jpg; sourceTree = "<group>"; };
 		129F97101D377CAE0096A8E6 /* RightCa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = RightCa.png; path = ../RightCa.png; sourceTree = "<group>"; };
 		129F97111D377CAE0096A8E6 /* LifeCa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LifeCa.png; path = ../LifeCa.png; sourceTree = "<group>"; };
+		12D89C801D4215B50099F850 /* RWChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RWChatViewController.h; path = RWWeChatController/RWChatViewController.h; sourceTree = "<group>"; };
+		12D89C811D4215B50099F850 /* RWChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RWChatViewController.m; path = RWWeChatController/RWChatViewController.m; sourceTree = "<group>"; };
+		12D89C841D4216140099F850 /* FEProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEProgressHUD.h; sourceTree = "<group>"; };
+		12D89C851D4216140099F850 /* FEProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEProgressHUD.m; sourceTree = "<group>"; };
+		12D89C861D4216140099F850 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
+		12D89C871D4216140099F850 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
+		12D89C881D4216140099F850 /* Mp3Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mp3Recorder.h; sourceTree = "<group>"; };
+		12D89C891D4216140099F850 /* Mp3Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mp3Recorder.m; sourceTree = "<group>"; };
+		12D89C8B1D4216140099F850 /* chat_message_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat_message_back.png; sourceTree = "<group>"; };
+		12D89C8C1D4216140099F850 /* FEButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEButton.h; sourceTree = "<group>"; };
+		12D89C8D1D4216140099F850 /* FEButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEButton.m; sourceTree = "<group>"; };
+		12D89C921D4216140099F850 /* microphone1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone1@2x.png"; sourceTree = "<group>"; };
+		12D89C931D4216140099F850 /* microphone2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone2@2x.png"; sourceTree = "<group>"; };
+		12D89C941D4216140099F850 /* microphone3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone3@2x.png"; sourceTree = "<group>"; };
+		12D89C951D4216140099F850 /* microphone4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone4@2x.png"; sourceTree = "<group>"; };
+		12D89C961D4216140099F850 /* microphone5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone5@2x.png"; sourceTree = "<group>"; };
+		12F1EDA61D4456D900506D9E /* playVoice2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice2.png; sourceTree = "<group>"; };
+		12F1EDA71D4456D900506D9E /* playVoice3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice3.png; sourceTree = "<group>"; };
+		12F1EDA81D4456D900506D9E /* playVoice1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice1.png; sourceTree = "<group>"; };
+		12F1EDAD1D44924200506D9E /* UIImage+XZMicroVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XZMicroVideoPlayer.h"; sourceTree = "<group>"; };
+		12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XZMicroVideoPlayer.m"; sourceTree = "<group>"; };
+		12F1EDB51D44924200506D9E /* XZMicroVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoPlayerView.h; sourceTree = "<group>"; };
+		12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoPlayerView.m; sourceTree = "<group>"; };
+		12F1EDB71D44924200506D9E /* XZMicroVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoView.h; sourceTree = "<group>"; };
+		12F1EDB81D44924200506D9E /* XZMicroVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoView.m; sourceTree = "<group>"; };
+		12F1EDCB1D4493EA00506D9E /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		12F1EDCC1D4493EA00506D9E /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		12F1EDCD1D4493EA00506D9E /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
+		12F1EDCE1D4493EA00506D9E /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressAnimatedView.m; sourceTree = "<group>"; };
+		12F1EDCF1D4493EA00506D9E /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		12F1EDD01D4493EA00506D9E /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		12F1EDD11D4493EA00506D9E /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		12F1EDD21D4493EA00506D9E /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		12F1EDD31D4493EA00506D9E /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		12F1EDDB1D44A7A500506D9E /* MicroVideoSource.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MicroVideoSource.xcassets; sourceTree = "<group>"; };
+		12F2F7B11D45F83000A3B13E /* RWMakeImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWMakeImageController.h; sourceTree = "<group>"; };
+		12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWMakeImageController.m; sourceTree = "<group>"; };
 		12FBA1691D407C5500F0D419 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
 		12FBA16A1D407C5500F0D419 /* keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyboard.png; sourceTree = "<group>"; };
 		12FBA16B1D407C5500F0D419 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
@@ -121,8 +182,8 @@
 		12FBA1731D407C5500F0D419 /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video.png; sourceTree = "<group>"; };
 		12FBA1741D407C5500F0D419 /* voice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice.png; sourceTree = "<group>"; };
 		12FBA1811D40D52F00F0D419 /* bottomCa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bottomCa.png; path = ../bottomCa.png; sourceTree = "<group>"; };
-		12FDA7741D387101007094B5 /* RWWeChatBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWWeChatBar.h; sourceTree = "<group>"; };
-		12FDA7751D387101007094B5 /* RWWeChatBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWWeChatBar.m; sourceTree = "<group>"; };
+		12FDA7741D387101007094B5 /* RWWeChatBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RWWeChatBar.h; path = RWWeChatController/RWWeChatBar.h; sourceTree = "<group>"; };
+		12FDA7751D387101007094B5 /* RWWeChatBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RWWeChatBar.m; path = RWWeChatController/RWWeChatBar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12D89C991D4216140099F850 /* libmp3lame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +215,11 @@
 		121422221D3618920082FF86 = {
 			isa = PBXGroup;
 			children = (
+				12F1EDCA1D4493EA00506D9E /* SVProgressHUD */,
+				12F2F7B41D46158B00A3B13E /* ChatLib */,
+				12F2F7AD1D45F08700A3B13E /* PhotoLib */,
+				12F1EDAC1D44922500506D9E /* VideoLib */,
+				12D89C831D4216140099F850 /* VoiceLib */,
 				12FBA1681D407C5500F0D419 /* weImage */,
 				129F970C1D377AC20096A8E6 /* MY.png */,
 				129F970D1D377AC20096A8E6 /* someOne.jpg */,
@@ -179,14 +246,11 @@
 			children = (
 				121422311D3618920082FF86 /* AppDelegate.h */,
 				121422321D3618920082FF86 /* AppDelegate.m */,
-				1270B5771D361C6500DD4AC5 /* RWWeiChatView.h */,
-				1270B5781D361C6500DD4AC5 /* RWWeiChatView.m */,
-				12FDA7741D387101007094B5 /* RWWeChatBar.h */,
-				12FDA7751D387101007094B5 /* RWWeChatBar.m */,
 				121422341D3618920082FF86 /* ViewController.h */,
 				121422351D3618920082FF86 /* ViewController.m */,
 				121422371D3618920082FF86 /* Main.storyboard */,
 				1214223A1D3618920082FF86 /* Assets.xcassets */,
+				12F1EDDB1D44A7A500506D9E /* MicroVideoSource.xcassets */,
 				1214223C1D3618920082FF86 /* LaunchScreen.storyboard */,
 				1214223F1D3618920082FF86 /* Info.plist */,
 				1214222E1D3618920082FF86 /* Supporting Files */,
@@ -250,9 +314,133 @@
 			path = Masonry;
 			sourceTree = "<group>";
 		};
+		12D89C831D4216140099F850 /* VoiceLib */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C841D4216140099F850 /* FEProgressHUD.h */,
+				12D89C851D4216140099F850 /* FEProgressHUD.m */,
+				12D89C861D4216140099F850 /* lame.h */,
+				12D89C871D4216140099F850 /* libmp3lame.a */,
+				12D89C881D4216140099F850 /* Mp3Recorder.h */,
+				12D89C891D4216140099F850 /* Mp3Recorder.m */,
+				12D89C8A1D4216140099F850 /* pic */,
+			);
+			path = VoiceLib;
+			sourceTree = "<group>";
+		};
+		12D89C8A1D4216140099F850 /* pic */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C8B1D4216140099F850 /* chat_message_back.png */,
+				12D89C8C1D4216140099F850 /* FEButton.h */,
+				12D89C8D1D4216140099F850 /* FEButton.m */,
+				12D89C8E1D4216140099F850 /* Masonry */,
+				12D89C921D4216140099F850 /* microphone1@2x.png */,
+				12D89C931D4216140099F850 /* microphone2@2x.png */,
+				12D89C941D4216140099F850 /* microphone3@2x.png */,
+				12D89C951D4216140099F850 /* microphone4@2x.png */,
+				12D89C961D4216140099F850 /* microphone5@2x.png */,
+				12D89C971D4216140099F850 /* photo */,
+			);
+			path = pic;
+			sourceTree = "<group>";
+		};
+		12D89C8E1D4216140099F850 /* Masonry */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C8F1D4216140099F850 /* VoiceLib */,
+			);
+			path = Masonry;
+			sourceTree = "<group>";
+		};
+		12D89C8F1D4216140099F850 /* VoiceLib */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C901D4216140099F850 /* pic */,
+			);
+			path = VoiceLib;
+			sourceTree = "<group>";
+		};
+		12D89C901D4216140099F850 /* pic */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C911D4216140099F850 /* photo */,
+			);
+			path = pic;
+			sourceTree = "<group>";
+		};
+		12D89C911D4216140099F850 /* photo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = photo;
+			sourceTree = "<group>";
+		};
+		12D89C971D4216140099F850 /* photo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = photo;
+			sourceTree = "<group>";
+		};
+		12F1EDAC1D44922500506D9E /* VideoLib */ = {
+			isa = PBXGroup;
+			children = (
+				12F1EDAD1D44924200506D9E /* UIImage+XZMicroVideoPlayer.h */,
+				12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */,
+				12F1EDB51D44924200506D9E /* XZMicroVideoPlayerView.h */,
+				12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */,
+				12F1EDB71D44924200506D9E /* XZMicroVideoView.h */,
+				12F1EDB81D44924200506D9E /* XZMicroVideoView.m */,
+			);
+			name = VideoLib;
+			sourceTree = "<group>";
+		};
+		12F1EDCA1D4493EA00506D9E /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				12F1EDCB1D4493EA00506D9E /* SVIndefiniteAnimatedView.h */,
+				12F1EDCC1D4493EA00506D9E /* SVIndefiniteAnimatedView.m */,
+				12F1EDCD1D4493EA00506D9E /* SVProgressAnimatedView.h */,
+				12F1EDCE1D4493EA00506D9E /* SVProgressAnimatedView.m */,
+				12F1EDCF1D4493EA00506D9E /* SVProgressHUD.bundle */,
+				12F1EDD01D4493EA00506D9E /* SVProgressHUD.h */,
+				12F1EDD11D4493EA00506D9E /* SVProgressHUD.m */,
+				12F1EDD21D4493EA00506D9E /* SVRadialGradientLayer.h */,
+				12F1EDD31D4493EA00506D9E /* SVRadialGradientLayer.m */,
+			);
+			name = SVProgressHUD;
+			path = SVProgressHUD/SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		12F2F7AD1D45F08700A3B13E /* PhotoLib */ = {
+			isa = PBXGroup;
+			children = (
+				12F2F7B11D45F83000A3B13E /* RWMakeImageController.h */,
+				12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */,
+			);
+			name = PhotoLib;
+			sourceTree = "<group>";
+		};
+		12F2F7B41D46158B00A3B13E /* ChatLib */ = {
+			isa = PBXGroup;
+			children = (
+				12D89C801D4215B50099F850 /* RWChatViewController.h */,
+				12D89C811D4215B50099F850 /* RWChatViewController.m */,
+				1270B5771D361C6500DD4AC5 /* RWWeiChatView.h */,
+				1270B5781D361C6500DD4AC5 /* RWWeiChatView.m */,
+				12FDA7741D387101007094B5 /* RWWeChatBar.h */,
+				12FDA7751D387101007094B5 /* RWWeChatBar.m */,
+			);
+			name = ChatLib;
+			sourceTree = "<group>";
+		};
 		12FBA1681D407C5500F0D419 /* weImage */ = {
 			isa = PBXGroup;
 			children = (
+				12F1EDA61D4456D900506D9E /* playVoice2.png */,
+				12F1EDA71D4456D900506D9E /* playVoice3.png */,
+				12F1EDA81D4456D900506D9E /* playVoice1.png */,
 				129F97101D377CAE0096A8E6 /* RightCa.png */,
 				12FBA1811D40D52F00F0D419 /* bottomCa.png */,
 				129F97111D377CAE0096A8E6 /* LifeCa.png */,
@@ -339,6 +527,7 @@
 				TargetAttributes = {
 					1214222A1D3618920082FF86 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 7XNMZG3S4E;
 					};
 					121422431D3618920082FF86 = {
 						CreatedOnToolsVersion = 7.3;
@@ -379,21 +568,32 @@
 				129F97121D377CAE0096A8E6 /* RightCa.png in Resources */,
 				1214223E1D3618920082FF86 /* LaunchScreen.storyboard in Resources */,
 				12FBA1771D407C5500F0D419 /* location.png in Resources */,
+				12D89C9D1D4216140099F850 /* microphone1@2x.png in Resources */,
+				12F1EDA91D4456D900506D9E /* playVoice2.png in Resources */,
 				129F97131D377CAE0096A8E6 /* LifeCa.png in Resources */,
+				12D89C9B1D4216140099F850 /* chat_message_back.png in Resources */,
 				12FBA17C1D407C5500F0D419 /* mypic.png in Resources */,
 				12FBA1781D407C5500F0D419 /* makephoto.png in Resources */,
+				12F1EDDC1D44A7A500506D9E /* MicroVideoSource.xcassets in Resources */,
 				12FBA1791D407C5500F0D419 /* makeVideo.png in Resources */,
 				12FBA17D1D407C5500F0D419 /* mysettings.png in Resources */,
 				12FBA17A1D407C5500F0D419 /* myface.png in Resources */,
+				12D89CA11D4216140099F850 /* microphone5@2x.png in Resources */,
 				129F970F1D377AC20096A8E6 /* someOne.jpg in Resources */,
 				12FBA1751D407C5500F0D419 /* collect.png in Resources */,
+				12D89C9F1D4216140099F850 /* microphone3@2x.png in Resources */,
 				12FBA1821D40D52F00F0D419 /* bottomCa.png in Resources */,
+				12F1EDD81D4493EA00506D9E /* SVProgressHUD.bundle in Resources */,
 				1214223B1D3618920082FF86 /* Assets.xcassets in Resources */,
 				12FBA17F1D407C5500F0D419 /* video.png in Resources */,
+				12F1EDAA1D4456D900506D9E /* playVoice3.png in Resources */,
+				12D89CA01D4216140099F850 /* microphone4@2x.png in Resources */,
 				121422391D3618920082FF86 /* Main.storyboard in Resources */,
+				12F1EDAB1D4456D900506D9E /* playVoice1.png in Resources */,
 				129F970E1D377AC20096A8E6 /* MY.png in Resources */,
 				12FBA17E1D407C5500F0D419 /* otherFuntion.png in Resources */,
 				12FBA1761D407C5500F0D419 /* keyboard.png in Resources */,
+				12D89C9E1D4216140099F850 /* microphone2@2x.png in Resources */,
 				12FBA1801D407C5500F0D419 /* voice.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,6 +620,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				126EF3131D362E850068F0CA /* MASConstraintMaker.m in Sources */,
+				12D89C9A1D4216140099F850 /* Mp3Recorder.m in Sources */,
 				121422361D3618920082FF86 /* ViewController.m in Sources */,
 				121422331D3618920082FF86 /* AppDelegate.m in Sources */,
 				126EF3121D362E850068F0CA /* MASConstraint.m in Sources */,
@@ -427,12 +628,23 @@
 				126EF3171D362E850068F0CA /* NSArray+MASAdditions.m in Sources */,
 				12FDA7761D387101007094B5 /* RWWeChatBar.m in Sources */,
 				126EF3161D362E850068F0CA /* MASViewConstraint.m in Sources */,
+				12F1EDDA1D4493EA00506D9E /* SVRadialGradientLayer.m in Sources */,
+				12F1EDBF1D44924200506D9E /* XZMicroVideoPlayerView.m in Sources */,
 				126EF3151D362E850068F0CA /* MASViewAttribute.m in Sources */,
 				126EF3191D362E850068F0CA /* View+MASAdditions.m in Sources */,
+				12F1EDD91D4493EA00506D9E /* SVProgressHUD.m in Sources */,
 				121422301D3618920082FF86 /* main.m in Sources */,
+				12D89C9C1D4216140099F850 /* FEButton.m in Sources */,
+				12F2F7B31D45F83000A3B13E /* RWMakeImageController.m in Sources */,
+				12D89C981D4216140099F850 /* FEProgressHUD.m in Sources */,
 				1270B5791D361C6500DD4AC5 /* RWWeiChatView.m in Sources */,
+				12F1EDC01D44924200506D9E /* XZMicroVideoView.m in Sources */,
+				12D89C821D4215B50099F850 /* RWChatViewController.m in Sources */,
+				12F1EDD61D4493EA00506D9E /* SVIndefiniteAnimatedView.m in Sources */,
 				126EF3111D362E850068F0CA /* MASCompositeConstraint.m in Sources */,
 				126EF3181D362E850068F0CA /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
+				12F1EDBB1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m in Sources */,
+				12F1EDD71D4493EA00506D9E /* SVProgressAnimatedView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,10 +787,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: TengFei Li (4KEJ2Z3Z29)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: TengFei Li (4KEJ2Z3Z29)";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RWWeChatController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VoiceLib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = RyeWhiskey.RWWeChatController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "5fb6b544-e3bb-4de1-b19f-eadfcdc61e32";
 			};
 			name = Debug;
 		};
@@ -586,10 +807,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: TengFei Li (4KEJ2Z3Z29)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: TengFei Li (4KEJ2Z3Z29)";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RWWeChatController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/VoiceLib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = RyeWhiskey.RWWeChatController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "5fb6b544-e3bb-4de1-b19f-eadfcdc61e32";
 			};
 			name = Release;
 		};
