@@ -40,19 +40,19 @@
 		12D89C9F1D4216140099F850 /* microphone3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C941D4216140099F850 /* microphone3@2x.png */; };
 		12D89CA01D4216140099F850 /* microphone4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C951D4216140099F850 /* microphone4@2x.png */; };
 		12D89CA11D4216140099F850 /* microphone5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12D89C961D4216140099F850 /* microphone5@2x.png */; };
+		12F1A0681D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1A0631D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.m */; };
+		12F1A0691D4D8A6C007B5994 /* XZMicroVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1A0651D4D8A6C007B5994 /* XZMicroVideoPlayerView.m */; };
+		12F1A06A1D4D8A6C007B5994 /* XZMicroVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1A0671D4D8A6C007B5994 /* XZMicroVideoView.m */; };
+		12F1A06E1D4D8AA2007B5994 /* RWMakeImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1A06D1D4D8AA2007B5994 /* RWMakeImageController.m */; };
 		12F1EDA91D4456D900506D9E /* playVoice2.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA61D4456D900506D9E /* playVoice2.png */; };
 		12F1EDAA1D4456D900506D9E /* playVoice3.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA71D4456D900506D9E /* playVoice3.png */; };
 		12F1EDAB1D4456D900506D9E /* playVoice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDA81D4456D900506D9E /* playVoice1.png */; };
-		12F1EDBB1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */; };
-		12F1EDBF1D44924200506D9E /* XZMicroVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */; };
-		12F1EDC01D44924200506D9E /* XZMicroVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDB81D44924200506D9E /* XZMicroVideoView.m */; };
 		12F1EDD61D4493EA00506D9E /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDCC1D4493EA00506D9E /* SVIndefiniteAnimatedView.m */; };
 		12F1EDD71D4493EA00506D9E /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDCE1D4493EA00506D9E /* SVProgressAnimatedView.m */; };
 		12F1EDD81D4493EA00506D9E /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDCF1D4493EA00506D9E /* SVProgressHUD.bundle */; };
 		12F1EDD91D4493EA00506D9E /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDD11D4493EA00506D9E /* SVProgressHUD.m */; };
 		12F1EDDA1D4493EA00506D9E /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F1EDD31D4493EA00506D9E /* SVRadialGradientLayer.m */; };
 		12F1EDDC1D44A7A500506D9E /* MicroVideoSource.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F1EDDB1D44A7A500506D9E /* MicroVideoSource.xcassets */; };
-		12F2F7B31D45F83000A3B13E /* RWMakeImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */; };
 		12FBA1751D407C5500F0D419 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA1691D407C5500F0D419 /* collect.png */; };
 		12FBA1761D407C5500F0D419 /* keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA16A1D407C5500F0D419 /* keyboard.png */; };
 		12FBA1771D407C5500F0D419 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 12FBA16B1D407C5500F0D419 /* location.png */; };
@@ -148,15 +148,17 @@
 		12D89C941D4216140099F850 /* microphone3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone3@2x.png"; sourceTree = "<group>"; };
 		12D89C951D4216140099F850 /* microphone4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone4@2x.png"; sourceTree = "<group>"; };
 		12D89C961D4216140099F850 /* microphone5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "microphone5@2x.png"; sourceTree = "<group>"; };
+		12F1A0621D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XZMicroVideoPlayer.h"; sourceTree = "<group>"; };
+		12F1A0631D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XZMicroVideoPlayer.m"; sourceTree = "<group>"; };
+		12F1A0641D4D8A6C007B5994 /* XZMicroVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoPlayerView.h; sourceTree = "<group>"; };
+		12F1A0651D4D8A6C007B5994 /* XZMicroVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoPlayerView.m; sourceTree = "<group>"; };
+		12F1A0661D4D8A6C007B5994 /* XZMicroVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoView.h; sourceTree = "<group>"; };
+		12F1A0671D4D8A6C007B5994 /* XZMicroVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoView.m; sourceTree = "<group>"; };
+		12F1A06C1D4D8AA2007B5994 /* RWMakeImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWMakeImageController.h; sourceTree = "<group>"; };
+		12F1A06D1D4D8AA2007B5994 /* RWMakeImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWMakeImageController.m; sourceTree = "<group>"; };
 		12F1EDA61D4456D900506D9E /* playVoice2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice2.png; sourceTree = "<group>"; };
 		12F1EDA71D4456D900506D9E /* playVoice3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice3.png; sourceTree = "<group>"; };
 		12F1EDA81D4456D900506D9E /* playVoice1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playVoice1.png; sourceTree = "<group>"; };
-		12F1EDAD1D44924200506D9E /* UIImage+XZMicroVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+XZMicroVideoPlayer.h"; sourceTree = "<group>"; };
-		12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+XZMicroVideoPlayer.m"; sourceTree = "<group>"; };
-		12F1EDB51D44924200506D9E /* XZMicroVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoPlayerView.h; sourceTree = "<group>"; };
-		12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoPlayerView.m; sourceTree = "<group>"; };
-		12F1EDB71D44924200506D9E /* XZMicroVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMicroVideoView.h; sourceTree = "<group>"; };
-		12F1EDB81D44924200506D9E /* XZMicroVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMicroVideoView.m; sourceTree = "<group>"; };
 		12F1EDCB1D4493EA00506D9E /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		12F1EDCC1D4493EA00506D9E /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		12F1EDCD1D4493EA00506D9E /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
@@ -167,8 +169,6 @@
 		12F1EDD21D4493EA00506D9E /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		12F1EDD31D4493EA00506D9E /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
 		12F1EDDB1D44A7A500506D9E /* MicroVideoSource.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MicroVideoSource.xcassets; sourceTree = "<group>"; };
-		12F2F7B11D45F83000A3B13E /* RWMakeImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWMakeImageController.h; sourceTree = "<group>"; };
-		12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWMakeImageController.m; sourceTree = "<group>"; };
 		12FBA1691D407C5500F0D419 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
 		12FBA16A1D407C5500F0D419 /* keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = keyboard.png; sourceTree = "<group>"; };
 		12FBA16B1D407C5500F0D419 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
@@ -215,10 +215,10 @@
 		121422221D3618920082FF86 = {
 			isa = PBXGroup;
 			children = (
+				12F1A06B1D4D8AA2007B5994 /* PhotoLib */,
+				12F1A0611D4D8A6C007B5994 /* VideoLib */,
 				12F1EDCA1D4493EA00506D9E /* SVProgressHUD */,
 				12F2F7B41D46158B00A3B13E /* ChatLib */,
-				12F2F7AD1D45F08700A3B13E /* PhotoLib */,
-				12F1EDAC1D44922500506D9E /* VideoLib */,
 				12D89C831D4216140099F850 /* VoiceLib */,
 				12FBA1681D407C5500F0D419 /* weImage */,
 				129F970C1D377AC20096A8E6 /* MY.png */,
@@ -383,17 +383,26 @@
 			path = photo;
 			sourceTree = "<group>";
 		};
-		12F1EDAC1D44922500506D9E /* VideoLib */ = {
+		12F1A0611D4D8A6C007B5994 /* VideoLib */ = {
 			isa = PBXGroup;
 			children = (
-				12F1EDAD1D44924200506D9E /* UIImage+XZMicroVideoPlayer.h */,
-				12F1EDAE1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m */,
-				12F1EDB51D44924200506D9E /* XZMicroVideoPlayerView.h */,
-				12F1EDB61D44924200506D9E /* XZMicroVideoPlayerView.m */,
-				12F1EDB71D44924200506D9E /* XZMicroVideoView.h */,
-				12F1EDB81D44924200506D9E /* XZMicroVideoView.m */,
+				12F1A0621D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.h */,
+				12F1A0631D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.m */,
+				12F1A0641D4D8A6C007B5994 /* XZMicroVideoPlayerView.h */,
+				12F1A0651D4D8A6C007B5994 /* XZMicroVideoPlayerView.m */,
+				12F1A0661D4D8A6C007B5994 /* XZMicroVideoView.h */,
+				12F1A0671D4D8A6C007B5994 /* XZMicroVideoView.m */,
 			);
-			name = VideoLib;
+			path = VideoLib;
+			sourceTree = "<group>";
+		};
+		12F1A06B1D4D8AA2007B5994 /* PhotoLib */ = {
+			isa = PBXGroup;
+			children = (
+				12F1A06C1D4D8AA2007B5994 /* RWMakeImageController.h */,
+				12F1A06D1D4D8AA2007B5994 /* RWMakeImageController.m */,
+			);
+			path = PhotoLib;
 			sourceTree = "<group>";
 		};
 		12F1EDCA1D4493EA00506D9E /* SVProgressHUD */ = {
@@ -411,15 +420,6 @@
 			);
 			name = SVProgressHUD;
 			path = SVProgressHUD/SVProgressHUD;
-			sourceTree = "<group>";
-		};
-		12F2F7AD1D45F08700A3B13E /* PhotoLib */ = {
-			isa = PBXGroup;
-			children = (
-				12F2F7B11D45F83000A3B13E /* RWMakeImageController.h */,
-				12F2F7B21D45F83000A3B13E /* RWMakeImageController.m */,
-			);
-			name = PhotoLib;
 			sourceTree = "<group>";
 		};
 		12F2F7B41D46158B00A3B13E /* ChatLib */ = {
@@ -623,27 +623,27 @@
 				12D89C9A1D4216140099F850 /* Mp3Recorder.m in Sources */,
 				121422361D3618920082FF86 /* ViewController.m in Sources */,
 				121422331D3618920082FF86 /* AppDelegate.m in Sources */,
+				12F1A0691D4D8A6C007B5994 /* XZMicroVideoPlayerView.m in Sources */,
 				126EF3121D362E850068F0CA /* MASConstraint.m in Sources */,
 				126EF3141D362E850068F0CA /* MASLayoutConstraint.m in Sources */,
 				126EF3171D362E850068F0CA /* NSArray+MASAdditions.m in Sources */,
 				12FDA7761D387101007094B5 /* RWWeChatBar.m in Sources */,
 				126EF3161D362E850068F0CA /* MASViewConstraint.m in Sources */,
 				12F1EDDA1D4493EA00506D9E /* SVRadialGradientLayer.m in Sources */,
-				12F1EDBF1D44924200506D9E /* XZMicroVideoPlayerView.m in Sources */,
 				126EF3151D362E850068F0CA /* MASViewAttribute.m in Sources */,
 				126EF3191D362E850068F0CA /* View+MASAdditions.m in Sources */,
 				12F1EDD91D4493EA00506D9E /* SVProgressHUD.m in Sources */,
 				121422301D3618920082FF86 /* main.m in Sources */,
 				12D89C9C1D4216140099F850 /* FEButton.m in Sources */,
-				12F2F7B31D45F83000A3B13E /* RWMakeImageController.m in Sources */,
+				12F1A06E1D4D8AA2007B5994 /* RWMakeImageController.m in Sources */,
+				12F1A06A1D4D8A6C007B5994 /* XZMicroVideoView.m in Sources */,
 				12D89C981D4216140099F850 /* FEProgressHUD.m in Sources */,
 				1270B5791D361C6500DD4AC5 /* RWWeiChatView.m in Sources */,
-				12F1EDC01D44924200506D9E /* XZMicroVideoView.m in Sources */,
 				12D89C821D4215B50099F850 /* RWChatViewController.m in Sources */,
+				12F1A0681D4D8A6C007B5994 /* UIImage+XZMicroVideoPlayer.m in Sources */,
 				12F1EDD61D4493EA00506D9E /* SVIndefiniteAnimatedView.m in Sources */,
 				126EF3111D362E850068F0CA /* MASCompositeConstraint.m in Sources */,
 				126EF3181D362E850068F0CA /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
-				12F1EDBB1D44924200506D9E /* UIImage+XZMicroVideoPlayer.m in Sources */,
 				12F1EDD71D4493EA00506D9E /* SVProgressAnimatedView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
